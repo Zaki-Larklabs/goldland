@@ -1,0 +1,40 @@
+[
+  {
+    "id": "srv-approvals",
+    "name": "Authority Approvals",
+    "slug": "authority-approvals",
+    "category": "Approvals",
+    "description": "End-to-end management of Dubai authority submissions and NOCs.",
+    "scope": ["DM", "DDA", "DCD", "DEWA", "Trakhees"],
+    "authorityRelations": ["auth-dda", "auth-dm"],
+    "projectTypes": ["Warehouse", "Office", "Restaurant", "Retail"],
+    "documents": ["Trade License", "Drawings"],
+    "process": ["Assessment", "Design", "Submission", "Inspection", "Approval"],
+    "faqs": [],
+    "projects": ["proj-1", "proj-2"],
+    "guides": [],
+    "seo": {
+      "title": "Authority Approvals in Dubai | Goldland Contracting",
+      "description": "Expert assistance for Dubai authority approvals including DM, DDA, DCD, and more."
+    }
+  },
+  {
+    "id": "srv-design",
+    "name": "Design & Engineering",
+    "slug": "design-engineering",
+    "category": "Design",
+    "description": "Architectural, structural, and MEP design services tailored for Dubai compliance.",
+    "scope": ["Architectural Layouts", "MEP Design", "Fire Safety", "3D Visualization"],
+    "authorityRelations": ["auth-dda", "auth-dm"],
+    "projectTypes": ["Warehouse", "Office", "Restaurant", "Retail"],
+    "documents": [],
+    "process": ["Requirement Gathering", "Drafting", "Client Review", "Final Drawings"],
+    "faqs": [],
+    "projects": ["proj-1", "proj-2"],
+    "guides": [],
+    "seo": {
+      "title": "Design & Engineering Services | Goldland Contracting",
+      "description": "Compliant architectural and MEP design services in Dubai."
+    }
+  }
+]

@@ -1,0 +1,90 @@
+[
+  {
+    "id": "auth-dda",
+    "name": "Dubai Development Authority (DDA)",
+    "slug": "dda",
+    "shortDescription": "Master developer approval for major free zones in Dubai.",
+    "fullDescription": "DDA approval is required for fit-out and construction projects within DDA jurisdictions, including Media City, Internet City, and Knowledge Park. We handle the entire NOC and submission process.",
+    "jurisdiction": "DDA Free Zones",
+    "status": "verified",
+    "services": ["srv-design", "srv-approvals"],
+    "projectTypes": ["Office", "Restaurant", "Retail"],
+    "documents": ["Trade License", "Tenancy Contract", "Architectural Drawings", "MEP Drawings", "NOC from building management"],
+    "process": ["Document Collection", "Design Preparation", "Submission to DDA Portal", "Revisions & Comments", "Final Approval NOC"],
+    "faqs": ["faq-dda-1", "faq-dda-2"],
+    "projects": ["proj-1"],
+    "guides": [],
+    "seo": {
+      "title": "DDA Approval Dubai | Goldland Contracting",
+      "description": "Expert DDA approval services for fit-outs in Dubai Media City, Internet City & more. We handle NOCs, drawings & submissions."
+    },
+    "published": true,
+    "lastReviewed": "2026-08-28"
+  },
+  {
+    "id": "auth-dm",
+    "name": "Dubai Municipality (DM)",
+    "slug": "dubai-municipality",
+    "shortDescription": "Core authority approval for mainland Dubai projects.",
+    "fullDescription": "DM approval is mandatory for most construction, modification, and fit-out projects in mainland Dubai. Our team handles everything from initial layout approvals to final completion certificates.",
+    "jurisdiction": "Mainland Dubai",
+    "status": "verified",
+    "services": ["srv-design", "srv-approvals", "srv-pm"],
+    "projectTypes": ["Warehouse", "Mezzanine", "Villa", "Commercial Fit-Out"],
+    "documents": ["Affection Plan", "Trade License", "Title Deed/Ejari", "Structural Drawings", "Architectural Drawings"],
+    "process": ["Site Assessment", "Drafting Drawings", "DM System Submission", "Inspection", "Completion Certificate"],
+    "faqs": ["faq-dm-1"],
+    "projects": ["proj-2"],
+    "guides": [],
+    "seo": {
+      "title": "Dubai Municipality Approval | Goldland Contracting",
+      "description": "Fast & compliant Dubai Municipality (DM) approvals for warehouses, mezzanines, and commercial fit-outs."
+    },
+    "published": true,
+    "lastReviewed": "2026-08-28"
+  },
+  {
+    "id": "auth-dcd",
+    "name": "Dubai Civil Defence (DCD)",
+    "slug": "dcd",
+    "shortDescription": "Fire safety and life safety approvals.",
+    "fullDescription": "DCD approval is mandatory for ensuring all fire and life safety requirements are met. We manage the design, submission, and inspection processes for DCD compliance.",
+    "jurisdiction": "Dubai",
+    "status": "verified",
+    "services": ["srv-design", "srv-approvals"],
+    "projectTypes": ["Commercial Fit-Out", "Warehouse", "Villa", "Retail"],
+    "documents": ["Trade License", "Tenancy Contract", "Fire Safety Drawings", "Architectural Drawings"],
+    "process": ["Design Review", "DCD Submission", "Inspection", "Final DCD Certificate"],
+    "faqs": [],
+    "projects": [],
+    "guides": [],
+    "seo": {
+      "title": "Dubai Civil Defence (DCD) Approval | Goldland Contracting",
+      "description": "Expert DCD approval services for fit-outs in Dubai. We handle fire safety drawings, inspections & submissions."
+    },
+    "published": true,
+    "lastReviewed": "2026-08-28"
+  },
+  {
+    "id": "auth-dewa",
+    "name": "Dubai Electricity & Water Authority (DEWA)",
+    "slug": "dewa",
+    "shortDescription": "Electricity and water connection approvals.",
+    "fullDescription": "DEWA approval is required for electrical and plumbing modifications. Our in-house engineers ensure full compliance with DEWA regulations for seamless power and water connections.",
+    "jurisdiction": "Dubai",
+    "status": "verified",
+    "services": ["srv-design", "srv-approvals"],
+    "projectTypes": ["Commercial Fit-Out", "Warehouse", "Villa", "Retail"],
+    "documents": ["Trade License", "Tenancy Contract", "MEP Drawings", "Load Schedule"],
+    "process": ["MEP Design", "DEWA Submission", "Inspection", "Final Connection"],
+    "faqs": [],
+    "projects": [],
+    "guides": [],
+    "seo": {
+      "title": "DEWA Approval Dubai | Goldland Contracting",
+      "description": "Fast & compliant DEWA approvals for electricity and water connections in Dubai."
+    },
+    "published": true,
+    "lastReviewed": "2026-08-28"
+  }
+]

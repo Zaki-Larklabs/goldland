@@ -1,0 +1,16 @@
+# ignore old files
+files/
+web/legacy_backup/
+web/unused_files.json
+web/deploy.zip
+
+# web dependencies
+web/node_modules/
+web/.next/
+web/out/
+web/build/
+web/.env*
+web/.vercel/
+web/*.tsbuildinfo
+web/next-env.d.ts
+.DS_Store
