@@ -21,7 +21,22 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function TeamPage() {
-  const members = await db.select().from(teamMembers).where(eq(teamMembers.isVerified, true));
+  // Crash-safe so a DB/DNS blip never breaks the build
+  let members: any[] = [];
+  try {
+    members = await db.select().from(teamMembers).where(eq(teamMembers.isVerified, true));
+  } catch {
+    members = [];
+  }
+  // SEO portal → H1 override + Site Texts → editable hero copy
+  let teamHeadings: { h1: string | null; h2: string | null } = { h1: null, h2: null };
+  let teamCopy: Record<string, string> = {};
+  try {
+    const { getPageHeadings } = await import("@/lib/seo/getSeo");
+    const { getPageContent } = await import("@/lib/content/getContent");
+    teamHeadings = await getPageHeadings("/team");
+    teamCopy = await getPageContent("team");
+  } catch {}
 
   return (
     <div className="bg-vellum dark:bg-ink min-h-screen">
@@ -37,9 +52,9 @@ export default async function TeamPage() {
           <div className="inline-block px-3 py-1 mb-6 text-sm font-semibold tracking-wider text-brass uppercase border border-brass/30 rounded-full bg-brass/10">
             Engineering Leadership
           </div>
-          <h1 className="text-4xl md:text-6xl font-display font-bold mb-6">Built by Engineers.</h1>
+          <h1 className="text-4xl md:text-6xl font-display font-bold mb-6">{teamHeadings.h1 ?? "Built by Engineers."}</h1>
           <p className="text-xl text-gray-300 leading-relaxed max-w-2xl mb-10">
-            We don't outsource our expertise. Every drawing, calculation, and authority submission is managed by our in-house team of verified technical professionals.
+            {teamCopy.hero_desc ?? "We don't outsource our expertise. Every drawing, calculation, and authority submission is managed by our in-house team of verified technical professionals."}
           </p>
         </div>
       </section>

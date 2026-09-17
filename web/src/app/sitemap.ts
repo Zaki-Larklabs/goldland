@@ -46,8 +46,9 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: auth.isVerified === false ? 0.6 : 0.9,
   }));
 
-  // 3. Dynamic Services + Project Types
-  const allServices = await db.select().from(services);
+  // 3. Dynamic Services + Project Types (crash-safe — sitemap must never break the build)
+  let allServices: any[] = [];
+  try { allServices = await db.select().from(services); } catch {}
   let allProjectTypes: any[] = [];
   try { allProjectTypes = await db.select().from((await import("@/lib/db/schema")).projectTypes); } catch {}
   const projectTypeUrls = allProjectTypes.map((pt: any) => ({
@@ -63,8 +64,9 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.8,
   }));
 
-  // 4. Dynamic Projects
-  const publishedProjects = await db.select().from(projects).where(eq(projects.approvalStatus, 'Completed'));
+  // 4. Dynamic Projects (crash-safe)
+  let publishedProjects: any[] = [];
+  try { publishedProjects = await db.select().from(projects).where(eq(projects.approvalStatus, 'Completed')); } catch {}
   const projectUrls = publishedProjects.map((proj) => ({
     url: `${baseUrl}/projects/${proj.slug}`,
     lastModified: proj.publishedAt ? new Date(proj.publishedAt) : new Date(),
@@ -72,8 +74,9 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.7,
   }));
 
-  // 5. Dynamic Guides + Blogs (same table, both routes)
-  const publishedGuides = await db.select().from(guides).where(eq(guides.status, 'published'));
+  // 5. Dynamic Guides + Blogs (same table, both routes) (crash-safe)
+  let publishedGuides: any[] = [];
+  try { publishedGuides = await db.select().from(guides).where(eq(guides.status, 'published')); } catch {}
   const guideUrls = publishedGuides.map((guide) => ({
     url: `${baseUrl}/guides/${guide.slug}`,
     lastModified: guide.updatedAt ? new Date(guide.updatedAt as any) : guide.publishedAt ? new Date(guide.publishedAt) : new Date(),

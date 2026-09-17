@@ -196,6 +196,7 @@ export default async function ServicePage({ params }: PageProps) {
                 slug={proj.slug}
                 location={proj.location}
                 approvalStatus={proj.approvalStatus}
+                coverImage={(proj as any).coverImage ?? null}
               />
             ))}
           </div>

@@ -159,6 +159,62 @@ export const CONTENT_REGISTRY: ContentEntry[] = [
     default:
       "Tell us your project location and type of work. Our team can help identify the relevant authority requirements and guide you through the approval process.",
   },
+  {
+    page: "team",
+    key: "hero_desc",
+    label: "Team — hero description",
+    default:
+      "We don't outsource our expertise. Every drawing, calculation, and authority submission is managed by our in-house team of verified technical professionals.",
+  },
+  {
+    page: "reviews",
+    key: "hero_desc",
+    label: "Reviews — hero description",
+    default:
+      "We don't fabricate testimonials. Every review listed below has been verified against a real contract and explicit client permission.",
+  },
+  {
+    page: "credentials",
+    key: "hero_desc",
+    label: "Credentials — hero description",
+    default:
+      "Transparency is a core engineering principle. Below is our current registry of trade licenses, authority approvals, and operational certifications.",
+  },
+  {
+    page: "faqs",
+    key: "hero_desc",
+    label: "FAQs — hero description",
+    default:
+      "Clear, verified answers to the most common questions regarding Dubai fit-out approvals, design, and engineering.",
+  },
+  {
+    page: "faqs",
+    key: "faq_a1",
+    label: "FAQs — answer: How long does DM approval take?",
+    default:
+      "Standard approvals typically take 3-5 working days assuming all documents and drawings are correct upon first submission. Complex projects may take longer.",
+  },
+  {
+    page: "faqs",
+    key: "faq_a2",
+    label: "FAQs — answer: DCD approval without sprinkler changes?",
+    default:
+      "Yes, Civil Defence (DCD) approval is often required for any partition changes, as the layout affects fire exit routes and safety compliance, even if sprinklers are untouched.",
+  },
+  {
+    page: "faqs",
+    key: "faq_a3",
+    label: "FAQs — answer: Landlord NOC help?",
+    default:
+      "Yes. Goldland's project management team coordinates directly with building management, developers, and landlords to acquire the necessary NOCs.",
+  },
+  {
+    page: "faqs",
+    key: "faq_a4",
+    label: "FAQs — answer: DDA vs Dubai Municipality?",
+    default:
+      "DDA (Dubai Development Authority) governs specific free zones like Dubai Media City and Internet City, while Dubai Municipality (DM) governs the mainland and certain other areas. The jurisdiction depends strictly on your project's location.",
+  },
 ];
 
 export const CONTENT_PAGES = Array.from(new Set(CONTENT_REGISTRY.map((e) => e.page)));

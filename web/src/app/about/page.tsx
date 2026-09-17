@@ -34,11 +34,14 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function AboutPage() {
-  // Site Texts portal → editable hero copy (falls back to hardcoded default)
+  // SEO portal → H1 override + Site Texts → editable hero copy (falls back to hardcoded defaults)
   let aboutCopy: Record<string, string> = {};
+  let aboutH1: string | null = null;
   try {
     const { getPageContent } = await import("@/lib/content/getContent");
+    const { getPageHeadings } = await import("@/lib/seo/getSeo");
     aboutCopy = await getPageContent("about");
+    aboutH1 = (await getPageHeadings("/about")).h1;
   } catch {}
   const localBusinessSchema = {
     "@context": "https://schema.org",
@@ -169,11 +172,15 @@ export default async function AboutPage() {
               </div>
 
               <h1 className="text-[32px] md:text-[52px] font-extrabold leading-[1.1] tracking-tight relative z-10">
-                <span className="text-white drop-shadow-lg">About Goldland Contracting</span>
-                <br />
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#C9A544] via-[#F3E1A6] to-[#C9A544] drop-shadow-sm mt-2 block">
-                  - Dubai Authority Approvals & Engineering
-                </span>
+                {aboutH1 ?? (
+                  <>
+                    <span className="text-white drop-shadow-lg">About Goldland Contracting</span>
+                    <br />
+                    <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#C9A544] via-[#F3E1A6] to-[#C9A544] drop-shadow-sm mt-2 block">
+                      - Dubai Authority Approvals & Engineering
+                    </span>
+                  </>
+                )}
               </h1>
 
               <p className="mt-8 text-[16px] md:text-[18px] leading-relaxed text-white/80 max-w-[65ch] font-medium relative z-10">

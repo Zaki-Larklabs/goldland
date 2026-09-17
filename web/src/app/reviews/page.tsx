@@ -21,8 +21,22 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function ReviewsPage() {
-  // Only fetch explicitly verified reviews
-  const verifiedReviews = await db.select().from(reviews).where(eq(reviews.isVerified, true)).orderBy(desc(reviews.createdAt));
+  // Only fetch explicitly verified reviews — crash-safe so a DB/DNS blip never breaks the build
+  let verifiedReviews: any[] = [];
+  try {
+    verifiedReviews = await db.select().from(reviews).where(eq(reviews.isVerified, true)).orderBy(desc(reviews.createdAt));
+  } catch {
+    verifiedReviews = [];
+  }
+  // SEO portal → H1 override + Site Texts → editable hero copy
+  let reviewsHeadings: { h1: string | null; h2: string | null } = { h1: null, h2: null };
+  let reviewsCopy: Record<string, string> = {};
+  try {
+    const { getPageHeadings } = await import("@/lib/seo/getSeo");
+    const { getPageContent } = await import("@/lib/content/getContent");
+    reviewsHeadings = await getPageHeadings("/reviews");
+    reviewsCopy = await getPageContent("reviews");
+  } catch {}
 
   return (
     <div className="bg-vellum dark:bg-ink min-h-screen">
@@ -35,9 +49,9 @@ export default async function ReviewsPage() {
             ]} 
             className="mb-8 text-gray-400 dark:text-gray-400 [&_a]:text-gray-400 [&_span]:text-white"
           />
-          <h1 className="text-4xl md:text-6xl font-display font-bold mb-6">Trust, Verified.</h1>
+          <h1 className="text-4xl md:text-6xl font-display font-bold mb-6">{reviewsHeadings.h1 ?? "Trust, Verified."}</h1>
           <p className="text-xl text-gray-300 leading-relaxed max-w-2xl mb-8">
-            We don't fabricate testimonials. Every review listed below has been verified against a real contract and explicit client permission.
+            {reviewsCopy.hero_desc ?? "We don't fabricate testimonials. Every review listed below has been verified against a real contract and explicit client permission."}
           </p>
           <a href="https://g.page/r/Cewj1_Y5-0G7EAE/review" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 px-8 py-4 bg-[#C9A544] text-black font-bold uppercase tracking-wider rounded-lg hover:bg-[#C9A544]/90 transition-colors">
             Leave a Review

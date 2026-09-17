@@ -32,10 +32,14 @@ export default async function GuidesIndexPage() {
   }
 
   // Site Texts portal → editable hero/list copy (falls back to hardcoded defaults)
+  // SEO portal → H1 override
   let guidesCopy: Record<string, string> = {};
+  let guidesH1: string | null = null;
   try {
     const { getPageContent } = await import("@/lib/content/getContent");
+    const { getPageHeadings } = await import("@/lib/seo/getSeo");
     guidesCopy = await getPageContent("guides");
+    guidesH1 = (await getPageHeadings("/guides")).h1;
   } catch {}
 
   const clusters = [
@@ -55,7 +59,7 @@ export default async function GuidesIndexPage() {
             ]} 
             className="mb-8 text-gray-400 dark:text-gray-400 [&_a]:text-gray-400 [&_span]:text-white"
           />
-          <h1 className="text-4xl md:text-6xl font-display font-bold mb-6">Technical Knowledge Base.</h1>
+          <h1 className="text-4xl md:text-6xl font-display font-bold mb-6">{guidesH1 ?? "Technical Knowledge Base."}</h1>
           <p className="text-xl text-gray-300 leading-relaxed max-w-2xl mb-8">
             {guidesCopy.hero_desc ?? "Expert-reviewed guides covering design constraints, MEP regulations, and authority submission procedures across Dubai."}
           </p>

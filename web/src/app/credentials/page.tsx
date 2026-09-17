@@ -14,7 +14,16 @@ export async function generateMetadata(): Promise<Metadata> {
   });
 }
 
-export default function CredentialsPage() {
+export default async function CredentialsPage() {
+  // SEO portal → H1 override + Site Texts → editable hero copy
+  let credHeadings: { h1: string | null; h2: string | null } = { h1: null, h2: null };
+  let credCopy: Record<string, string> = {};
+  try {
+    const { getPageHeadings } = await import("@/lib/seo/getSeo");
+    const { getPageContent } = await import("@/lib/content/getContent");
+    credHeadings = await getPageHeadings("/credentials");
+    credCopy = await getPageContent("credentials");
+  } catch {}
   return (
     <div className="bg-vellum dark:bg-ink min-h-screen">
       {/* 1. Hero */}
@@ -26,9 +35,9 @@ export default function CredentialsPage() {
             ]} 
             className="mb-8 text-gray-400 dark:text-gray-400 [&_a]:text-gray-400 [&_span]:text-white"
           />
-          <h1 className="text-4xl md:text-6xl font-display font-bold mb-6">Verified Credentials.</h1>
+          <h1 className="text-4xl md:text-6xl font-display font-bold mb-6">{credHeadings.h1 ?? "Verified Credentials."}</h1>
           <p className="text-xl text-gray-300 leading-relaxed max-w-2xl mb-6">
-            Transparency is a core engineering principle. Below is our current registry of trade licenses, authority approvals, and operational certifications.
+            {credCopy.hero_desc ?? "Transparency is a core engineering principle. Below is our current registry of trade licenses, authority approvals, and operational certifications."}
           </p>
         </div>
       </section>

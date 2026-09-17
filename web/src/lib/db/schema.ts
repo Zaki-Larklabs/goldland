@@ -34,6 +34,9 @@ export const projects = pgTable("projects", {
   authorityId: text("authority_id").references(() => authorities.id),
   location: text("location"),
   approvalStatus: text("approval_status"),
+  coverImage: text("cover_image"),
+  description: text("description"),
+  category: text("category"),
   publishedAt: timestamp("published_at"),
 });
 

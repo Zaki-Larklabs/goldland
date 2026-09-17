@@ -10,15 +10,18 @@ export interface ProjectCardProps {
   slug: string
   location?: string | null
   approvalStatus?: string | null
+  coverImage?: string | null
+  category?: string | null
 }
 
-export function ProjectCard({ title, slug, location, approvalStatus }: ProjectCardProps) {
+export function ProjectCard({ title, slug, location, approvalStatus, coverImage }: ProjectCardProps) {
+  const imgSrc = coverImage || `/images/projects/${slug}.jpg`;
   return (
     <Link href={`/projects/${slug}`} className="block h-full group">
       <Card className="flex flex-col h-full hover:shadow-md transition-all group-hover:border-brass overflow-hidden">
         <div className="h-48 bg-gray-200 dark:bg-ink-mute relative overflow-hidden rounded-t-xl">
           <Image
-            src={`/images/projects/${slug}.jpg`}
+            src={imgSrc}
             alt={`${title} — ${location ?? "Goldland project"}`}
             fill
             sizes="(max-width: 768px) 100vw, 33vw"

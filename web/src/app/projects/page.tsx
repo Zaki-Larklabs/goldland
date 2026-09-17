@@ -21,7 +21,13 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function ProjectsIndex() {
-  const allProjects = await db.select().from(projects).orderBy(desc(projects.publishedAt));
+  // Crash-safe so a DB/DNS blip never breaks the build
+  let allProjects: any[] = [];
+  try {
+    allProjects = await db.select().from(projects).orderBy(desc(projects.publishedAt));
+  } catch {
+    allProjects = [];
+  }
   // SEO portal → H1 override (falls back to hardcoded heading)
   const { getPageHeadings } = await import("@/lib/seo/getSeo");
   const headings = await getPageHeadings("/projects");
@@ -75,6 +81,7 @@ export default async function ProjectsIndex() {
                   slug={proj.slug}
                   location={proj.location}
                   approvalStatus={proj.approvalStatus}
+                  coverImage={(proj as any).coverImage ?? null}
                 />
               ))
             ) : (

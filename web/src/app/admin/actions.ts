@@ -1,7 +1,7 @@
 import { db } from "@/lib/db";
 import { authorities, projects, services, reviews, faqs } from "@/lib/db/schema";
 import { eq } from "drizzle-orm";
-import { revalidatePath } from "next/cache";
+import { revalidatePath, revalidateTag } from "next/cache";
 
 export async function createAuthority(formData: FormData) {
   "use server";
@@ -53,15 +53,32 @@ export async function deleteService(id: string) {
 }
 export async function createProject(formData: FormData) {
   "use server";
-  const id = `proj-${Date.now()}`;
+  const id = ((formData.get("id") as string) || "").trim() || `proj-${Date.now()}`;
   const title = formData.get("title") as string;
   const slug = (formData.get("slug") as string)?.toLowerCase().replace(/\s+/g,"-");
-  const location = formData.get("location") as string;
-  const approvalStatus = formData.get("approvalStatus") as string;
-  try { await db.insert(projects).values({ id, title, slug, location, approvalStatus, publishedAt: new Date() }); revalidatePath("/admin"); return { success:true }; } catch(e){ return {success:false, error:String(e)}; }
+  const location = (formData.get("location") as string) || null;
+  const approvalStatus = (formData.get("approvalStatus") as string) || null;
+  const category = ((formData.get("category") as string) || "").trim() || null;
+  const coverImage = ((formData.get("coverImage") as string) || "").trim() || null;
+  const description = ((formData.get("description") as string) || "").trim() || null;
+  if (!title || !slug) return { success: false, error: "Title and slug are required" };
+  try {
+    const existing = await db.select({ id: projects.id }).from(projects).where(eq(projects.id, id)).limit(1);
+    if (existing.length) {
+      await db.update(projects).set({ title, slug, location, approvalStatus, category, coverImage, description }).where(eq(projects.id, id));
+    } else {
+      await db.insert(projects).values({ id, title, slug, location, approvalStatus, category, coverImage, description, publishedAt: new Date() });
+    }
+    revalidatePath("/admin");
+    revalidatePath("/projects");
+    revalidatePath(`/projects/${slug}`);
+    revalidatePath("/");
+    revalidateTag("content", "max");
+    return { success:true };
+  } catch(e){ return {success:false, error:String(e)}; }
 }
 export async function deleteProject(id: string) {
-  "use server"; try { await db.delete(projects).where(eq(projects.id, id)); revalidatePath("/admin"); return { success:true }; } catch(e){ return {success:false, error:String(e)}; }
+  "use server"; try { await db.delete(projects).where(eq(projects.id, id)); revalidatePath("/admin"); revalidatePath("/projects"); revalidatePath("/"); return { success:true }; } catch(e){ return {success:false, error:String(e)}; }
 }
 export async function createReview(formData: FormData) {
   "use server";

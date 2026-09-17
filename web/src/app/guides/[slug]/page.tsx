@@ -202,6 +202,7 @@ export default async function GuideDetailPage({ params }: PageProps) {
                     id={proj.id}
                     title={proj.title}
                     slug={proj.slug}
+                    coverImage={(proj as any).coverImage ?? null}
                   />
                 ))}
               </div>

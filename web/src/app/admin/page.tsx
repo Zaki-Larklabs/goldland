@@ -78,8 +78,8 @@ const ui = {
   emptySub: "text-xs text-gray-500 mt-1.5",
 };
 
-export default async function AdminDashboard({ searchParams }: { searchParams: Promise<{ tab?: string; edit?: string; q?: string }> }) {
-  const { tab = 'leads', edit, q = '' } = await searchParams; // Defaulting to leads as per design
+export default async function AdminDashboard({ searchParams }: { searchParams: Promise<{ tab?: string; edit?: string; q?: string; editId?: string }> }) {
+  const { tab = 'leads', edit, q = '', editId } = await searchParams; // Defaulting to leads as per design
   const editingSeo = edit ? (await (async () => { try { const { eq } = await import("drizzle-orm"); const rows = await db.select().from(seoRecords).where(eq(seoRecords.route, edit)).limit(1); return rows[0] ?? null; } catch { return null; } })()) as any : null;
   
   const allAuthorities = await db.select().from(authorities);
@@ -102,6 +102,8 @@ export default async function AdminDashboard({ searchParams }: { searchParams: P
   const filteredContent = query
     ? contentList.filter((b: any) => `${b.label} ${b.page} ${b.key} ${b.value}`.toLowerCase().includes(query))
     : contentList;
+  // Project edit-prefill (?tab=projects&editId=...)
+  const editProject = tab === 'projects' && editId ? (await (async () => { try { const { eq } = await import("drizzle-orm"); const rows = await db.select().from(projects).where(eq(projects.id, editId)).limit(1); return rows[0] ?? null; } catch { return null; } })()) as any : null;
 
   // Calculate some dummy stats for the cards (in a real app, these would be precise DB queries)
   const newThisWeek = allLeads.filter(l => new Date(l.createdAt!) > new Date(Date.now() - 7 * 24 * 60 * 60 * 1000)).length;
@@ -423,18 +425,26 @@ export default async function AdminDashboard({ searchParams }: { searchParams: P
               </div>
             )}
             {tab === 'projects' && (
-              <div className="bg-[#111827]/90 backdrop-blur-sm border border-white/5 rounded-2xl p-8">
-                <form action={async (fd)=>{ "use server"; await createProject(fd); }} className="mb-8 p-6 bg-white/5 border border-white/10 rounded-xl">
-                  <h3 className="font-bold text-white mb-4">Add Project</h3>
+              <div className="bg-[#111827]/90 backdrop-blur-sm border border-white/5 rounded-2xl p-6 md:p-8">
+                <div className="flex items-start justify-between gap-4 mb-2">
+                  <h3 className="font-bold text-white">{editProject ? "Edit Project" : "Add Project"} <span className="text-xs font-normal text-gray-500">— with cover image, description & category</span></h3>
+                  {editProject && <Link href="?tab=projects" className="text-xs px-3 py-1.5 rounded-lg border border-white/10 text-gray-400 hover:text-white shrink-0">✕ Cancel edit</Link>}
+                </div>
+                <p className="text-xs text-gray-500 mb-5">Published here → appears on <a href="/projects" target="_blank" className="text-[#C9A544] hover:underline">/projects</a>, homepage sections and sitemap. Cover image: paste an image URL (same pattern as blog covers). For direct file hosting, create a public <code className="font-mono text-gray-400">project-images</code> bucket in Supabase Storage, then paste its public URL here.</p>
+                <form action={async (fd)=>{ "use server"; await createProject(fd); }} className="mb-8 p-5 md:p-6 bg-white/[0.03] border border-white/10 rounded-xl">
+                  {editProject && <input type="hidden" name="id" value={editProject.id} />}
                   <div className="grid md:grid-cols-4 gap-3">
-                    <input name="title" placeholder="Title" required className="bg-white/5 border border-white/10 text-white p-3 rounded-lg placeholder:text-gray-500" />
-                    <input name="slug" placeholder="slug" required className="bg-white/5 border border-white/10 text-white p-3 rounded-lg placeholder:text-gray-500" />
-                    <input name="location" placeholder="Location" className="bg-white/5 border border-white/10 text-white p-3 rounded-lg placeholder:text-gray-500" />
-                    <input name="approvalStatus" placeholder="Status" className="bg-white/5 border border-white/10 text-white p-3 rounded-lg placeholder:text-gray-500" />
+                    <input name="title" placeholder="Title *" required defaultValue={editProject?.title ?? ""} className="bg-white/5 border border-white/10 text-white p-3 rounded-lg placeholder:text-gray-500 text-sm focus:outline-none focus:ring-1 focus:ring-[#C9A544]" />
+                    <input name="slug" placeholder="slug *" required defaultValue={editProject?.slug ?? ""} className="bg-white/5 border border-white/10 text-white p-3 rounded-lg placeholder:text-gray-500 text-sm font-mono focus:outline-none focus:ring-1 focus:ring-[#C9A544]" />
+                    <input name="location" placeholder="Location e.g. Business Bay, Dubai" defaultValue={editProject?.location ?? ""} className="bg-white/5 border border-white/10 text-white p-3 rounded-lg placeholder:text-gray-500 text-sm focus:outline-none focus:ring-1 focus:ring-[#C9A544]" />
+                    <input name="approvalStatus" placeholder="Status e.g. Completed" defaultValue={editProject?.approvalStatus ?? ""} className="bg-white/5 border border-white/10 text-white p-3 rounded-lg placeholder:text-gray-500 text-sm focus:outline-none focus:ring-1 focus:ring-[#C9A544]" />
+                    <input name="category" placeholder="Category e.g. Fit-Out, Warehouse" defaultValue={editProject?.category ?? ""} className="bg-white/5 border border-white/10 text-white p-3 rounded-lg placeholder:text-gray-500 text-sm focus:outline-none focus:ring-1 focus:ring-[#C9A544]" />
+                    <input name="coverImage" placeholder="Cover image URL https://…" defaultValue={editProject?.coverImage ?? ""} className="bg-white/5 border border-white/10 text-white p-3 rounded-lg placeholder:text-gray-500 text-sm md:col-span-3 focus:outline-none focus:ring-1 focus:ring-[#C9A544]" />
                   </div>
-                  <button type="submit" className="mt-4 bg-[#C9A544] text-black font-bold py-2 px-6 rounded-lg">Add Project</button>
+                  <textarea name="description" placeholder="Project description (shows on the detail page hero)" rows={3} defaultValue={editProject?.description ?? ""} className="mt-3 w-full bg-white/5 border border-white/10 text-white p-3 rounded-lg placeholder:text-gray-500 text-sm focus:outline-none focus:ring-1 focus:ring-[#C9A544]" />
+                  <button type="submit" className="mt-4 bg-[#C9A544] text-black font-bold py-2.5 px-8 rounded-lg hover:bg-[#D9B96A] text-sm">{editProject ? "Update Project →" : "Add Project →"}</button>
                 </form>
-                <div className="overflow-x-auto rounded-xl border border-white/10"><table className="w-full text-left"><thead><tr className="bg-white/5 border-b border-white/10"><th className="p-3 text-gray-300 text-sm">Title</th><th className="p-3 text-gray-300 text-sm">Slug</th><th className="p-3 text-gray-300 text-sm">Location</th><th className="p-3 text-right text-gray-300 text-sm">Action</th></tr></thead><tbody className="divide-y divide-white/5">{allProjects.map((p:any)=>(<tr key={p.id} className="hover:bg-white/[0.02]"><td className="p-3 text-white text-sm">{p.title}</td><td className="p-3 text-gray-400 font-mono text-xs">{p.slug}</td><td className="p-3 text-gray-400 text-xs">{p.location||"-"}</td><td className="p-3 text-right"><form action={async ()=>{ "use server"; await deleteProject(p.id);}}><button className="text-red-400 text-xs hover:underline">Delete</button></form></td></tr>))}{allProjects.length===0 && <tr><td colSpan={4} className="p-6 text-center text-gray-500 text-sm">No projects.</td></tr>}</tbody></table></div>
+                <div className="overflow-x-auto rounded-xl border border-white/10"><table className="w-full text-left"><thead><tr className="bg-white/5 border-b border-white/10"><th className="p-3 text-gray-300 text-xs">Title</th><th className="p-3 text-gray-300 text-xs">Slug</th><th className="p-3 text-gray-300 text-xs">Location</th><th className="p-3 text-gray-300 text-xs">Media</th><th className="p-3 text-right text-gray-300 text-xs">Action</th></tr></thead><tbody className="divide-y divide-white/5">{allProjects.map((p:any)=>(<tr key={p.id} className="hover:bg-white/[0.02]"><td className="p-3 text-white text-sm max-w-[220px] truncate" title={p.title}>{p.title}</td><td className="p-3 text-gray-400 font-mono text-xs">/projects/{p.slug}</td><td className="p-3 text-gray-400 text-xs">{p.location||"-"}</td><td className="p-3 text-xs">{p.coverImage ? <a href={p.coverImage} target="_blank" className="text-[#C9A544] hover:underline">image ↗</a> : <span className="text-gray-600">—</span>}</td><td className="p-3 text-right whitespace-nowrap"><a href={`/projects/${p.slug}`} target="_blank" className="text-[#C9A544] text-xs hover:underline mr-3">View</a><Link href={`?tab=projects&editId=${p.id}`} className="text-blue-400 text-xs hover:underline mr-3">Edit</Link><form action={async ()=>{ "use server"; await deleteProject(p.id);}} className="inline"><button className="text-red-400 text-xs hover:underline">Delete</button></form></td></tr>))}{allProjects.length===0 && <tr><td colSpan={5} className="p-8 text-center text-gray-500 text-sm">No projects yet — add your first one above.</td></tr>}</tbody></table></div>
               </div>
             )}
             {tab === 'reviews' && (

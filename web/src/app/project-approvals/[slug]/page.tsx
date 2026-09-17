@@ -271,6 +271,7 @@ export default async function ProjectApprovalPage({ params }: PageProps) {
                   slug={proj.slug}
                   location={proj.location}
                   approvalStatus={proj.approvalStatus}
+                  coverImage={(proj as any).coverImage ?? null}
                 />
               ))
             ) : (

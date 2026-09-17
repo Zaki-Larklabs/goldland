@@ -121,6 +121,16 @@ export default async function ProjectCaseStudyPage({ params }: PageProps) {
             className="mb-8 text-gray-400 dark:text-gray-400 [&_a]:text-gray-400 [&_span]:text-white"
           />
           <h1 className="text-4xl md:text-6xl font-display font-bold mb-6">{project.title}</h1>
+          {(project as any).description && (
+            <p className="text-lg text-gray-300 leading-relaxed max-w-3xl mb-8">{(project as any).description}</p>
+          )}
+          {(project as any).coverImage && (
+            <div className="relative w-full h-64 md:h-96 rounded-2xl overflow-hidden border border-white/10 mt-4">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src={(project as any).coverImage} alt={project.title} className="w-full h-full object-cover" loading="lazy" />
+              <div className="absolute inset-0 bg-gradient-to-t from-[#070C1C]/60 via-transparent to-transparent pointer-events-none" />
+            </div>
+          )}
           
           <div className="flex flex-wrap gap-4 mt-8">
             {project.location && (
