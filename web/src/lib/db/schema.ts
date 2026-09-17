@@ -1,4 +1,4 @@
-import { pgTable, text, integer, boolean, timestamp, jsonb } from "drizzle-orm/pg-core";
+import { pgTable, text, integer, boolean, timestamp, jsonb, uniqueIndex } from "drizzle-orm/pg-core";
 
 export const authorities = pgTable("authorities", {
   id: text("id").primaryKey(),
@@ -126,6 +126,20 @@ export const redirects = pgTable("redirects", {
   destination: text("destination").notNull(),
   statusCode: integer("status_code").default(301),
 });
+
+// ── CMS: editable frontend texts (Site Texts portal tab) ──
+// One row per (page, key). Pages always fall back to hardcoded defaults
+// when no row exists, so the site never renders empty.
+export const contentBlocks = pgTable("content_blocks", {
+  id: text("id").primaryKey(),
+  page: text("page").notNull(),
+  key: text("key").notNull(),
+  label: text("label"),
+  value: text("value"),
+  updatedAt: timestamp("updated_at").defaultNow(),
+}, (t) => [
+  uniqueIndex("content_blocks_page_key_idx").on(t.page, t.key),
+]);
 
 export const seoRecords = pgTable("seo_records", {
   id: text("id").primaryKey(),

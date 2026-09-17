@@ -101,6 +101,9 @@ export default async function ServicesPage() {
   // SEO portal → H1/H2 override (falls back to hardcoded headings)
   const { getPageHeadings } = await import("@/lib/seo/getSeo");
   const headings = await getPageHeadings("/services");
+  // Site Texts portal → editable hero copy
+  const { getPageContent } = await import("@/lib/content/getContent");
+  const copy = await getPageContent("services");
 
   const itemListLd = {
     "@context": "https://schema.org",
@@ -180,7 +183,7 @@ export default async function ServicesPage() {
                 {headings.h1 ?? <>Engineering the approvals behind Dubai&apos;s next generation of spaces.</>}
               </h1>
               <p className="mt-4 text-[15px] md:text-[16px] leading-relaxed text-white/70 max-w-[52ch]">
-                Goldland Contracting provides engineering, authority approval and project support for commercial, industrial and development projects across Dubai.
+                {copy.hero_sub ?? "Goldland Contracting provides engineering, authority approval and project support for commercial, industrial and development projects across Dubai."}
               </p>
 
               <div className="mt-6 flex flex-wrap gap-6 text-[11px] tracking-wide text-white/70">

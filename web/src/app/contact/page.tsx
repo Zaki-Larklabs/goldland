@@ -3,8 +3,14 @@
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
 import { VideoMaskOverlay } from "@/components/ui/video-mask-overlay";
+import { usePageContent } from "@/lib/content/usePageContent";
 
 export default function ContactPage() {
+  // Site Texts portal → editable hero copy (defaults render first, live values merge in)
+  const copy = usePageContent("contact", {
+    hero_title: "Let's Get Started",
+    hero_sub: "Send us your project details and we'll get back to you quickly.",
+  });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitStatus, setSubmitStatus] = useState<"idle" | "success" | "error">("idle");
   const [formData, setFormData] = useState({
@@ -88,8 +94,8 @@ export default function ContactPage() {
         <VideoMaskOverlay intensity={0.85} />
         <div className="wrap relative" style={{ zIndex: 5 }}>
           <span className="breadcrumb"><Link href="/">Home</Link> / Contact</span>
-          <h1>Let's Get Started</h1>
-          <p>Send us your project details and we'll get back to you quickly.</p>
+          <h1>{copy.hero_title}</h1>
+          <p>{copy.hero_sub}</p>
         </div>
       </section>
 

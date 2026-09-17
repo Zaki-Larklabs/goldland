@@ -33,7 +33,13 @@ export async function generateMetadata(): Promise<Metadata> {
   });
 }
 
-export default function AboutPage() {
+export default async function AboutPage() {
+  // Site Texts portal → editable hero copy (falls back to hardcoded default)
+  let aboutCopy: Record<string, string> = {};
+  try {
+    const { getPageContent } = await import("@/lib/content/getContent");
+    aboutCopy = await getPageContent("about");
+  } catch {}
   const localBusinessSchema = {
     "@context": "https://schema.org",
     "@type": "LocalBusiness",
@@ -171,10 +177,7 @@ export default function AboutPage() {
               </h1>
 
               <p className="mt-8 text-[16px] md:text-[18px] leading-relaxed text-white/80 max-w-[65ch] font-medium relative z-10">
-                Goldland Contracting LLC is a Dubai-based engineering and contracting company specializing in Dubai
-                authority approvals, engineering design, fit-out and project coordination. Since 2016, our team has
-                supported clients with authority submissions, technical drawings, MEP coordination and compliance
-                requirements across Dubai&apos;s mainland, free zones and other regulated jurisdictions.
+                {aboutCopy.hero_desc ?? "Goldland Contracting LLC is a Dubai-based engineering and contracting company specializing in Dubai authority approvals, engineering design, fit-out and project coordination. Since 2016, our team has supported clients with authority submissions, technical drawings, MEP coordination and compliance requirements across Dubai's mainland, free zones and other regulated jurisdictions."}
               </p>
 
               <div className="mt-10 flex flex-wrap gap-4 relative z-10">

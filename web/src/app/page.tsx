@@ -68,6 +68,10 @@ export default async function HomePage() {
 
   // SEO portal → on-page headings override (H1 via hero, H2 via first section)
   const headings = await getPageHeadings("/");
+  // Site Texts portal → editable frontend copy (hero sub, trust bar, CTA)
+  const { getPageContent } = await import("@/lib/content/getContent");
+  const copy = await getPageContent("home");
+  const t = (key: string, fallback: string) => copy[key] ?? fallback;
 
   // Build FAQ schema — merge DB faqs + docx 5 authority FAQs (valid, visible)
   const docFaqs = [
@@ -169,15 +173,15 @@ export default async function HomePage() {
         }}
       />
       {/* 1. Hero — Video Background */}
-      <SimpleVideoHero h1={headings.h1} />
+      <SimpleVideoHero h1={headings.h1} heroSub={t("hero_sub", "Engineering-led authority approval support for construction, fit-out, renovation and modification projects across Dubai.")} />
 
       {/* 2. Trust Bar — per HOME PAGE - CONTENT.docx */}
       <div className="bg-[#070C1C] text-[#F1EEE4] py-5 border-y border-[rgba(201,165,68,0.2)] relative z-20">
         <div className="container mx-auto px-4 flex flex-wrap justify-center md:justify-between items-center gap-6 text-xs md:text-sm font-mono tracking-widest uppercase font-semibold">
-          <div className="flex items-center gap-2"><div className="w-2 h-2 rounded-full bg-[#C9A544]" /> 10+ Years of Experience</div>
-          <div className="flex items-center gap-2"><div className="w-2 h-2 rounded-full bg-[#C9A544]" /> 20+ Authority Jurisdictions</div>
-          <div className="flex items-center gap-2"><div className="w-2 h-2 rounded-full bg-[#C9A544]" /> 500+ Approvals Filed</div>
-          <div className="flex items-center gap-2"><div className="w-2 h-2 rounded-full bg-[#C9A544]" /> In-House Engineering Team</div>
+          <div className="flex items-center gap-2"><div className="w-2 h-2 rounded-full bg-[#C9A544]" /> {t("trust_1", "10+ Years of Experience")}</div>
+          <div className="flex items-center gap-2"><div className="w-2 h-2 rounded-full bg-[#C9A544]" /> {t("trust_2", "20+ Authority Jurisdictions")}</div>
+          <div className="flex items-center gap-2"><div className="w-2 h-2 rounded-full bg-[#C9A544]" /> {t("trust_3", "500+ Approvals Filed")}</div>
+          <div className="flex items-center gap-2"><div className="w-2 h-2 rounded-full bg-[#C9A544]" /> {t("trust_4", "In-House Engineering Team")}</div>
         </div>
       </div>
 
@@ -441,8 +445,8 @@ export default async function HomePage() {
         <div className="absolute inset-0 opacity-[0.06]" style={{ backgroundImage: "linear-gradient(rgba(201,165,68,1) 1px, transparent 1px), linear-gradient(90deg, rgba(201,165,68,1) 1px, transparent 1px)", backgroundSize: "48px 48px" }} aria-hidden />
         <div className="absolute inset-0 bg-gradient-to-r from-[#070C1C] via-[#070C1C]/90 to-[#0C1530]/50" aria-hidden />
         <div className="relative container mx-auto px-4 py-14 md:py-16 text-center">
-          <h2 className="text-[28px] md:text-[40px] font-bold tracking-tight">Ready to Move Your Project Forward?</h2>
-          <p className="text-sm md:text-[15px] text-white/60 max-w-2xl mx-auto mt-3 leading-relaxed">Share your drawings, project details or current approval requirement. Goldland can help you understand the likely engineering and authority path for your project.</p>
+          <h2 className="text-[28px] md:text-[40px] font-bold tracking-tight">{t("cta_title", "Ready to Move Your Project Forward?")}</h2>
+          <p className="text-sm md:text-[15px] text-white/60 max-w-2xl mx-auto mt-3 leading-relaxed">{t("cta_desc", "Share your drawings, project details or current approval requirement. Goldland can help you understand the likely engineering and authority path for your project.")}</p>
           <div className="mt-8 flex flex-col sm:flex-row gap-3 justify-center">
             <Link href="/#assessment" className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-xl bg-[#C9A544] hover:bg-[#D9B96A] text-black text-xs font-bold tracking-widest uppercase">Start Project Assessment →</Link>
             <a href="https://wa.me/971566321734?text=Hello%20Goldland%2C%20I%20would%20like%20to%20send%20my%20drawings%20for%20assessment." target="_blank" rel="noopener noreferrer" className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-xl border border-white/20 bg-white/5 hover:bg-white/10 text-white text-xs font-bold tracking-widest uppercase backdrop-blur">Send Drawings</a>

@@ -5,6 +5,8 @@ import { authorities, projects, leads, services, reviews, guides, seoRecords, re
 import { createAuthority, deleteAuthority, seedDefaultAuthorities, createService, deleteService, createProject, deleteProject, createReview, deleteReview } from "./actions";
 import { upsertSeo, deleteSeo, upsertRedirect, deleteRedirect } from "./actions-seo";
 import { upsertBlog, deleteBlog } from "./actions-blog";
+import { upsertContent, resetContent } from "./actions-content";
+import { getContentAdminList } from "@/lib/content/getContent";
 import { desc } from "drizzle-orm";
 import LeadsTable from "@/components/admin/LeadsTable";
 import { SeoPortalForm } from "@/components/admin/SeoPortalForm";
@@ -15,7 +17,7 @@ import {
   Search, Bell, ChevronDown, LayoutDashboard, 
   Download, FileText, Building2, Wrench, Star, 
   MessageSquare, Sparkles, Users, Settings, Plus,
-  TrendingUp, Clock, CheckCircle2, User, Globe, BookOpen, ArrowRightLeft
+  TrendingUp, Clock, CheckCircle2, User, Globe, BookOpen, ArrowRightLeft, Type
 } from "lucide-react";
 
 export const dynamic = "force-dynamic";
@@ -30,6 +32,7 @@ const TAB_META: Record<string, { title: string; desc: string }> = {
   reviews: { title: "Reviews", desc: "Manage verified reviews." },
   blog: { title: "Blog Management", desc: "Create, edit and publish blogs with ISR + Article schema." },
   seo: { title: "SEO Portal", desc: "Dynamically manage SEO meta, keywords, OG images, canonicals & sitemaps." },
+  texts: { title: "Site Texts", desc: "Edit website frontend copy directly — hero, trust bar, CTAs. Saves go live instantly." },
   redirects: { title: "Redirects", desc: "Manage 301/302 redirects (DB-driven)." },
 };
 
@@ -75,8 +78,8 @@ const ui = {
   emptySub: "text-xs text-gray-500 mt-1.5",
 };
 
-export default async function AdminDashboard({ searchParams }: { searchParams: Promise<{ tab?: string; edit?: string }> }) {
-  const { tab = 'leads', edit } = await searchParams; // Defaulting to leads as per design
+export default async function AdminDashboard({ searchParams }: { searchParams: Promise<{ tab?: string; edit?: string; q?: string }> }) {
+  const { tab = 'leads', edit, q = '' } = await searchParams; // Defaulting to leads as per design
   const editingSeo = edit ? (await (async () => { try { const { eq } = await import("drizzle-orm"); const rows = await db.select().from(seoRecords).where(eq(seoRecords.route, edit)).limit(1); return rows[0] ?? null; } catch { return null; } })()) as any : null;
   
   const allAuthorities = await db.select().from(authorities);
@@ -93,6 +96,12 @@ export default async function AdminDashboard({ searchParams }: { searchParams: P
   try { siteRouteGroups = await getSiteRoutes(); siteRouteList = Array.from(new Set(siteRouteGroups.flatMap((g) => g.routes))); }
   catch { try { siteRouteList = await getFlatSiteRoutes(); } catch { siteRouteList = []; } }
   const coveredRoutes = new Set(allSeo.map((s: any) => s.route));
+  // Site Texts (CMS) — registry merged with DB rows; filter via ?q=
+  let contentList: any[] = []; try { contentList = await getContentAdminList(); } catch {}
+  const query = q.trim().toLowerCase();
+  const filteredContent = query
+    ? contentList.filter((b: any) => `${b.label} ${b.page} ${b.key} ${b.value}`.toLowerCase().includes(query))
+    : contentList;
 
   // Calculate some dummy stats for the cards (in a real app, these would be precise DB queries)
   const newThisWeek = allLeads.filter(l => new Date(l.createdAt!) > new Date(Date.now() - 7 * 24 * 60 * 60 * 1000)).length;
@@ -125,6 +134,7 @@ export default async function AdminDashboard({ searchParams }: { searchParams: P
               <AdminNavLink href="?tab=reviews" icon={Star} label="Reviews" active={tab === 'reviews'} />
               <AdminNavLink href="?tab=blog" icon={BookOpen} label="Blog" active={tab === 'blog'} />
               <AdminNavLink href="?tab=seo" icon={Globe} label="SEO Portal" active={tab === 'seo'} />
+              <AdminNavLink href="?tab=texts" icon={Type} label="Site Texts" active={tab === 'texts'} />
               <AdminNavLink href="?tab=redirects" icon={ArrowRightLeft} label="Redirects" active={tab === 'redirects'} />
             </nav>
           </div>
@@ -214,7 +224,7 @@ export default async function AdminDashboard({ searchParams }: { searchParams: P
 
         {/* MOBILE SECTION SWITCHER (same ?tab links, no JS) */}
         <nav aria-label="Admin sections" className="lg:hidden relative z-20 border-b border-white/[0.06] bg-[#0A101C]/90 backdrop-blur-md px-4 py-2.5 flex gap-2 overflow-x-auto">
-          {[["dashboard","Dashboard"],["leads","Leads"],["authorities","Authorities"],["projects","Projects"],["services","Services"],["reviews","Reviews"],["blog","Blog"],["seo","SEO"],["redirects","Redirects"]].map(([key, label]) => (
+          {[["dashboard","Dashboard"],["leads","Leads"],["authorities","Authorities"],["projects","Projects"],["services","Services"],["reviews","Reviews"],["blog","Blog"],["seo","SEO"],["texts","Texts"],["redirects","Redirects"]].map(([key, label]) => (
             <Link
               key={key}
               href={`?tab=${key}`}
@@ -503,6 +513,52 @@ export default async function AdminDashboard({ searchParams }: { searchParams: P
                 </form>
                 <div className="overflow-x-auto rounded-xl border border-white/10"><table className="w-full text-left"><thead><tr className="bg-white/5 border-b border-white/10"><th className="p-3 text-gray-300 text-xs">Source</th><th className="p-3 text-gray-300 text-xs">Destination</th><th className="p-3 text-gray-300 text-xs">Code</th><th className="p-3 text-right text-gray-300 text-xs">Action</th></tr></thead><tbody className="divide-y divide-white/5">{allRedirects.map((r:any)=>(<tr key={r.id}><td className="p-3 font-mono text-xs text-white">{r.source}</td><td className="p-3 font-mono text-xs text-[#C9A544]">{r.destination}</td><td className="p-3 text-xs text-gray-400">{r.statusCode}</td><td className="p-3 text-right"><form action={async ()=>{ "use server"; await deleteRedirect(r.id);}}><button className="text-red-400 text-xs hover:underline">Delete</button></form></td></tr>))}{allRedirects.length===0 && <tr><td colSpan={4} className="p-6 text-center text-gray-500 text-sm">No redirects.</td></tr>}</tbody></table></div>
                 <p className="text-[11px] text-gray-500">Note: next.config.ts redirects currently static (1 entry). For full DB-driven redirects add middleware lookup — schema ready.</p>
+              </div>
+            )}
+            {tab === 'texts' && (
+              <div className="space-y-6">
+                <div className="bg-[#111827]/90 backdrop-blur-sm border border-white/5 rounded-2xl p-6 md:p-8">
+                  <h3 className="font-bold text-white">Site Texts — Frontend Copy Manager</h3>
+                  <p className="text-xs text-gray-500 mt-1 mb-6">Every text below appears verbatim on the website. Edit + Save to update the live page instantly (no deploy). <span className="text-gray-400">“Default” = built-in copy; “Custom” = your override.</span></p>
+                  <form action="/admin" method="get" className="flex flex-col sm:flex-row gap-2 mb-6">
+                    <input type="hidden" name="tab" value="texts" />
+                    <input name="q" defaultValue={q} placeholder="Filter texts, e.g. hero, trust, cta…" className="flex-1 bg-white/5 border border-white/10 text-white p-3 rounded-lg placeholder:text-gray-500 text-sm focus:outline-none focus:ring-1 focus:ring-[#C9A544]" />
+                    <div className="flex gap-2">
+                      <button type="submit" className="bg-white/5 hover:bg-white/10 border border-white/10 text-white text-sm font-semibold px-5 py-2.5 rounded-lg">Filter</button>
+                      {q && <Link href="?tab=texts" className="bg-white/5 hover:bg-white/10 border border-white/10 text-gray-400 text-sm px-4 py-2.5 rounded-lg">Clear</Link>}
+                    </div>
+                  </form>
+                  <div className="space-y-4">
+                    {filteredContent.map((b: any) => (
+                      <form key={`${b.page}::${b.key}`} action={async (fd)=>{ "use server"; await upsertContent(fd); }} className="p-5 bg-white/[0.03] border border-white/10 rounded-xl">
+                        <input type="hidden" name="page" value={b.page} />
+                        <input type="hidden" name="key" value={b.key} />
+                        <div className="flex flex-wrap items-center justify-between gap-2 mb-1">
+                          <p className="text-sm font-semibold text-white">{b.label}</p>
+                          <span className={`px-2 py-1 rounded text-[10px] font-bold border ${b.isDefault ? "bg-gray-500/10 text-gray-400 border-white/10" : "bg-[#C9A544]/10 text-[#C9A544] border-[#C9A544]/25"}`}>{b.isDefault ? "DEFAULT" : "CUSTOM · LIVE"}</span>
+                        </div>
+                        <p className="font-mono text-[11px] text-gray-500 mb-3">{b.page} › {b.key}{b.updatedAt ? ` · updated ${new Date(b.updatedAt).toLocaleString()}` : ""}</p>
+                        <textarea name="value" defaultValue={b.value} rows={3} required className="w-full bg-white/5 border border-white/10 text-white p-3 rounded-lg placeholder:text-gray-500 text-sm focus:outline-none focus:ring-1 focus:ring-[#C9A544]" />
+                        <div className="mt-3 flex flex-wrap gap-2">
+                          <button type="submit" className="bg-[#C9A544] text-black font-bold py-2 px-6 rounded-lg hover:bg-[#D9B96A] text-sm">Save → live instantly</button>
+                          {!b.isDefault && <button type="submit" formAction={async ()=>{ "use server"; await resetContent(b.page, b.key); }} className="bg-white/5 hover:bg-white/10 border border-white/10 text-gray-300 text-sm px-4 py-2 rounded-lg">Reset to default</button>}
+                        </div>
+                      </form>
+                    ))}
+                    {filteredContent.length === 0 && <p className="p-8 text-center text-sm text-gray-500 border border-dashed border-white/10 rounded-xl">No texts match “{q}”. <Link href="?tab=texts" className="text-[#C9A544] hover:underline">Clear filter</Link></p>}
+                  </div>
+                </div>
+                <div className="bg-[#111827]/90 backdrop-blur-sm border border-white/5 rounded-2xl p-6 md:p-8">
+                  <h4 className="font-bold text-white mb-1">Add Custom Text Block</h4>
+                  <p className="text-xs text-gray-500 mb-5">For developer-registered keys only — new keys need a code slot first. Ask engineering before adding.</p>
+                  <form action={async (fd)=>{ "use server"; await upsertContent(fd); }} className="grid md:grid-cols-4 gap-3">
+                    <input name="page" placeholder="page e.g. home" required className="bg-white/5 border border-white/10 text-white p-3 rounded-lg placeholder:text-gray-500 text-sm font-mono" />
+                    <input name="key" placeholder="key e.g. hero_sub" required className="bg-white/5 border border-white/10 text-white p-3 rounded-lg placeholder:text-gray-500 text-sm font-mono" />
+                    <input name="label" placeholder="Label (optional)" className="bg-white/5 border border-white/10 text-white p-3 rounded-lg placeholder:text-gray-500 text-sm" />
+                    <input name="value" placeholder="Value *" required className="bg-white/5 border border-white/10 text-white p-3 rounded-lg placeholder:text-gray-500 text-sm" />
+                    <button type="submit" className="md:col-span-4 bg-[#C9A544] text-black font-bold py-2.5 px-6 rounded-lg hover:bg-[#D9B96A] text-sm w-fit">Add Block →</button>
+                  </form>
+                </div>
               </div>
             )}
 

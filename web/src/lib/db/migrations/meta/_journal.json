@@ -15,6 +15,13 @@
       "when": 1789652361423,
       "tag": "0001_add-h1-h2-to-seo",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1789656117834,
+      "tag": "0002_add-content-blocks",
+      "breakpoints": true
     }
   ]
 }

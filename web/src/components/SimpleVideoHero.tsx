@@ -3,7 +3,7 @@ import React from "react";
 import Link from "next/link";
 import { OptimizedVideo } from "@/components/ui/optimized-video";
 
-export default function SimpleVideoHero({ h1 }: { h1?: string | null }) {
+export default function SimpleVideoHero({ h1, heroSub }: { h1?: string | null; heroSub?: string | null }) {
   return (
     <section className="relative w-full overflow-hidden bg-[#050A14] min-h-[620px] lg:min-h-[680px] flex items-center">
       {/* Background — supplied hero video properly attached */}
@@ -61,9 +61,9 @@ export default function SimpleVideoHero({ h1 }: { h1?: string | null }) {
             DM · DCD · DDA · DEWA · TRAKHEES
           </div>
 
-          {/* Supporting */}
+          {/* Supporting — editable via Admin → Site Texts (home › hero_sub) */}
           <p className="mt-4 text-[13px] md:text-[14px] leading-relaxed text-white/65 max-w-[520px]">
-            Engineering-led authority approval support for construction, fit-out, renovation and modification projects across Dubai.
+            {heroSub ?? "Engineering-led authority approval support for construction, fit-out, renovation and modification projects across Dubai."}
           </p>
 
           {/* CTAs */}

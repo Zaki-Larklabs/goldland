@@ -25,7 +25,14 @@ const LinkedinIcon = ({ size = 20 }: { size?: number }) => (
   </svg>
 );
 
-export function Footer() {
+export async function Footer() {
+  // Site Texts portal → editable tagline (falls back to hardcoded default)
+  let tagline = "Interior fitout, MEP design and Dubai authority approvals — handled end to end from Al Qusais, Dubai.";
+  try {
+    const { getPageContent } = await import("@/lib/content/getContent");
+    const copy = await getPageContent("footer");
+    if (copy.tagline) tagline = copy.tagline;
+  } catch {}
   return (
     <footer className="bg-gray-50 text-ink border-t border-border-light pt-16 pb-8 dark:bg-ink dark:text-white dark:border-border-dark">
       <div className="container mx-auto px-4 md:px-6">
@@ -40,7 +47,7 @@ export function Footer() {
               />
             </Link>
             <p className="text-gray-600 dark:text-gray-400 text-sm leading-relaxed max-w-sm">
-              Interior fitout, MEP design and Dubai authority approvals — handled end to end from Al Qusais, Dubai.
+              {tagline}
             </p>
             <div className="flex items-center gap-4 pt-2">
               <a href="#" className="text-gray-500 hover:text-brass dark:text-gray-400 dark:hover:text-brass transition-colors">
