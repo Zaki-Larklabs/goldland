@@ -61,6 +61,12 @@ const STATS = [
 export default async function AuthorityApprovalsIndex() {
   // SEO portal → H1/H2 override (falls back to hardcoded headings)
   const headings = await getPageHeadings("/authority-approvals");
+  // Site Texts portal → editable hero copy
+  let aaCopy: Record<string, string> = {};
+  try {
+    const { getPageContent } = await import("@/lib/content/getContent");
+    aaCopy = await getPageContent("authority-approvals");
+  } catch {}
   return (
     <div className="bg-[#FDFBF6] dark:bg-ink min-h-screen text-[#0A0D14] dark:text-white">
 
@@ -88,7 +94,7 @@ export default async function AuthorityApprovalsIndex() {
             {headings.h1 ?? (<>Every Jurisdiction.<br /><span className="text-[#C9A544]">One Team.</span></>)}
           </h1>
           <p className="text-xl text-[#6B7280] dark:text-gray-400 max-w-2xl mx-auto mb-12 leading-relaxed">
-            Goldland navigates the full landscape of Dubai's government and free zone authorities. We file, follow up, and close — so your project stays on schedule.
+            {aaCopy.hero_desc ?? "Goldland navigates the full landscape of Dubai's government and free zone authorities. We file, follow up, and close — so your project stays on schedule."}
           </p>
 
           {/* Stats bar */}

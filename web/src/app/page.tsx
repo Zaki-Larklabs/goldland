@@ -73,13 +73,13 @@ export default async function HomePage() {
   const copy = await getPageContent("home");
   const t = (key: string, fallback: string) => copy[key] ?? fallback;
 
-  // Build FAQ schema — merge DB faqs + docx 5 authority FAQs (valid, visible)
+  // Build FAQ schema — merge DB faqs + docx 5 authority FAQs (valid, visible; answers portal-editable via Site Texts)
   const docFaqs = [
-    { question: "What are Dubai authority approvals?", answer: "Dubai authority approvals are permits, NOCs and technical approvals required for certain construction, fit-out, renovation and modification projects. Depending on the project, approvals may involve DDA, Dubai Municipality, DCD, DEWA, Trakhees, JAFZA and other authorities." },
-    { question: "Which authority approval does my project need in Dubai?", answer: "It depends on your project's location, property type and scope of work. Goldland Contracting can assess your project and identify the relevant authority and approval requirements." },
-    { question: "Do villa modifications require approval in Dubai?", answer: "Yes, many villa modifications require approval before work begins. Requirements depend on the property's location, community and type of modification." },
-    { question: "Do I need approval for a swimming pool or mezzanine floor?", answer: "Yes, swimming pool construction and mezzanine floor projects may require approval from the relevant authority. The requirements depend on the property and project scope." },
-    { question: "How long does a Dubai authority approval take?", answer: "Approval time varies depending on the authority, project type and completeness of the submitted documents. Goldland Contracting manages the submission and coordination process to help avoid unnecessary delays." },
+    { question: "What are Dubai authority approvals?", answer: t("faq_a1", "Dubai authority approvals are permits, NOCs and technical approvals required for certain construction, fit-out, renovation and modification projects. Depending on the project, approvals may involve DDA, Dubai Municipality, DCD, DEWA, Trakhees, JAFZA and other authorities.") },
+    { question: "Which authority approval does my project need in Dubai?", answer: t("faq_a2", "It depends on your project's location, property type and scope of work. Goldland Contracting can assess your project and identify the relevant authority and approval requirements.") },
+    { question: "Do villa modifications require approval in Dubai?", answer: t("faq_a3", "Yes, many villa modifications require approval before work begins. Requirements depend on the property's location, community and type of modification.") },
+    { question: "Do I need approval for a swimming pool or mezzanine floor?", answer: t("faq_a4", "Yes, swimming pool construction and mezzanine floor projects may require approval from the relevant authority. The requirements depend on the property and project scope.") },
+    { question: "How long does a Dubai authority approval take?", answer: t("faq_a5", "Approval time varies depending on the authority, project type and completeness of the submitted documents. Goldland Contracting manages the submission and coordination process to help avoid unnecessary delays.") },
   ];
   const mergedFaqs = [...(allFaqs || []), ...docFaqs];
   const faqSchema = mergedFaqs.length ? {
@@ -406,11 +406,11 @@ export default async function HomePage() {
           </div>
           <div className="space-y-3">
             {[
-              { q: "What are Dubai authority approvals?", a: "Dubai authority approvals are permits, NOCs and technical approvals required for certain construction, fit-out, renovation and modification projects. Depending on the project, approvals may involve DDA, Dubai Municipality, DCD, DEWA, Trakhees, JAFZA and other authorities." },
-              { q: "Which authority approval does my project need in Dubai?", a: "It depends on your project's location, property type and scope of work. Goldland Contracting can assess your project and identify the relevant authority and approval requirements." },
-              { q: "Do villa modifications require approval in Dubai?", a: "Yes, many villa modifications require approval before work begins. Requirements depend on the property's location, community and type of modification." },
-              { q: "Do I need approval for a swimming pool or mezzanine floor?", a: "Yes, swimming pool construction and mezzanine floor projects may require approval from the relevant authority. The requirements depend on the property and project scope." },
-              { q: "How long does a Dubai authority approval take?", a: "Approval time varies depending on the authority, project type and completeness of the submitted documents. Goldland Contracting manages the submission and coordination process to help avoid unnecessary delays." },
+              { q: "What are Dubai authority approvals?", a: t("faq_a1", "Dubai authority approvals are permits, NOCs and technical approvals required for certain construction, fit-out, renovation and modification projects. Depending on the project, approvals may involve DDA, Dubai Municipality, DCD, DEWA, Trakhees, JAFZA and other authorities.") },
+              { q: "Which authority approval does my project need in Dubai?", a: t("faq_a2", "It depends on your project's location, property type and scope of work. Goldland Contracting can assess your project and identify the relevant authority and approval requirements.") },
+              { q: "Do villa modifications require approval in Dubai?", a: t("faq_a3", "Yes, many villa modifications require approval before work begins. Requirements depend on the property's location, community and type of modification.") },
+              { q: "Do I need approval for a swimming pool or mezzanine floor?", a: t("faq_a4", "Yes, swimming pool construction and mezzanine floor projects may require approval from the relevant authority. The requirements depend on the property and project scope.") },
+              { q: "How long does a Dubai authority approval take?", a: t("faq_a5", "Approval time varies depending on the authority, project type and completeness of the submitted documents. Goldland Contracting manages the submission and coordination process to help avoid unnecessary delays.") },
             ].map((f) => (
               <details key={f.q} className="group rounded-2xl border border-black/10 dark:border-white/10 bg-white dark:bg-white/[0.04] p-5 open:bg-[#FFFEFB] dark:open:bg-white/[0.06] transition-colors">
                 <summary className="font-semibold cursor-pointer list-none flex justify-between gap-4 text-[14px] text-[#0A0D14] dark:text-white">{f.q} <span className="w-6 h-6 rounded-full bg-[#C9A544]/10 border border-[#C9A544]/20 flex items-center justify-center text-[#C9A544] group-open:rotate-45 transition-transform shrink-0">+</span></summary>

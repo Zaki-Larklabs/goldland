@@ -212,9 +212,7 @@ export default async function AboutPage() {
             </div>
             <h2 className="text-[26px] md:text-[32px] font-bold tracking-tight">Why Goldland Contracting?</h2>
             <p className="text-sm leading-relaxed text-[#6B7280] dark:text-white/60 mt-3 max-w-[62ch] mx-auto">
-              Authority approvals are closely connected to engineering, documentation and compliance. Our approach
-              combines technical expertise with authority submission support, helping clients avoid common issues caused
-              by incorrect drawings, missing documentation or submission to the wrong jurisdiction.
+              {aboutCopy.why_desc ?? "Authority approvals are closely connected to engineering, documentation and compliance. Our approach combines technical expertise with authority submission support, helping clients avoid common issues caused by incorrect drawings, missing documentation or submission to the wrong jurisdiction."}
             </p>
           </div>
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -552,10 +550,9 @@ export default async function AboutPage() {
         />
         <div className="absolute inset-0 bg-gradient-to-r from-[#070C1C] via-[#070C1C]/90 to-[#0C1530]/50" aria-hidden />
         <div className="relative container mx-auto max-w-[900px] px-4 md:px-6 py-14 md:py-16 text-center">
-          <h2 className="text-[28px] md:text-[36px] font-bold tracking-tight">Need Help With Dubai Authority Approvals?</h2>
+          <h2 className="text-[28px] md:text-[36px] font-bold tracking-tight">{aboutCopy.cta_title ?? "Need Help With Dubai Authority Approvals?"}</h2>
           <p className="text-sm md:text-[15px] text-white/60 max-w-2xl mx-auto mt-3 leading-relaxed">
-            Tell us your project location and type of work. Our team can help identify the relevant authority
-            requirements and guide you through the approval process.
+            {aboutCopy.cta_desc ?? "Tell us your project location and type of work. Our team can help identify the relevant authority requirements and guide you through the approval process."}
           </p>
           <div className="mt-8 flex flex-col sm:flex-row gap-3 justify-center">
             <Link

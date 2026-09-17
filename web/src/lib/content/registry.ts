@@ -84,6 +84,81 @@ export const CONTENT_REGISTRY: ContentEntry[] = [
     default:
       "Interior fitout, MEP design and Dubai authority approvals — handled end to end from Al Qusais, Dubai.",
   },
+  {
+    page: "authority-approvals",
+    key: "hero_desc",
+    label: "Authority Approvals — hero description",
+    default:
+      "Goldland navigates the full landscape of Dubai's government and free zone authorities. We file, follow up, and close — so your project stays on schedule.",
+  },
+  {
+    page: "guides",
+    key: "hero_desc",
+    label: "Guides — hero description",
+    default:
+      "Expert-reviewed guides covering design constraints, MEP regulations, and authority submission procedures across Dubai.",
+  },
+  {
+    page: "guides",
+    key: "list_title",
+    label: "Guides — article list heading",
+    default: "Latest Guides",
+  },
+  {
+    page: "home",
+    key: "faq_a1",
+    label: "Homepage — FAQ answer: What are Dubai authority approvals?",
+    default:
+      "Dubai authority approvals are permits, NOCs and technical approvals required for certain construction, fit-out, renovation and modification projects. Depending on the project, approvals may involve DDA, Dubai Municipality, DCD, DEWA, Trakhees, JAFZA and other authorities.",
+  },
+  {
+    page: "home",
+    key: "faq_a2",
+    label: "Homepage — FAQ answer: Which authority approval does my project need?",
+    default:
+      "It depends on your project's location, property type and scope of work. Goldland Contracting can assess your project and identify the relevant authority and approval requirements.",
+  },
+  {
+    page: "home",
+    key: "faq_a3",
+    label: "Homepage — FAQ answer: Do villa modifications require approval?",
+    default:
+      "Yes, many villa modifications require approval before work begins. Requirements depend on the property's location, community and type of modification.",
+  },
+  {
+    page: "home",
+    key: "faq_a4",
+    label: "Homepage — FAQ answer: Swimming pool or mezzanine approval?",
+    default:
+      "Yes, swimming pool construction and mezzanine floor projects may require approval from the relevant authority. The requirements depend on the property and project scope.",
+  },
+  {
+    page: "home",
+    key: "faq_a5",
+    label: "Homepage — FAQ answer: How long does approval take?",
+    default:
+      "Approval time varies depending on the authority, project type and completeness of the submitted documents. Goldland Contracting manages the submission and coordination process to help avoid unnecessary delays.",
+  },
+  {
+    page: "about",
+    key: "why_desc",
+    label: "About — Why Goldland section paragraph",
+    default:
+      "Authority approvals are closely connected to engineering, documentation and compliance. Our approach combines technical expertise with authority submission support, helping clients avoid common issues caused by incorrect drawings, missing documentation or submission to the wrong jurisdiction.",
+  },
+  {
+    page: "about",
+    key: "cta_title",
+    label: "About — closing CTA heading",
+    default: "Need Help With Dubai Authority Approvals?",
+  },
+  {
+    page: "about",
+    key: "cta_desc",
+    label: "About — closing CTA description",
+    default:
+      "Tell us your project location and type of work. Our team can help identify the relevant authority requirements and guide you through the approval process.",
+  },
 ];
 
 export const CONTENT_PAGES = Array.from(new Set(CONTENT_REGISTRY.map((e) => e.page)));

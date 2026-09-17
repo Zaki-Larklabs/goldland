@@ -31,6 +31,13 @@ export default async function GuidesIndexPage() {
     allGuides = [];
   }
 
+  // Site Texts portal → editable hero/list copy (falls back to hardcoded defaults)
+  let guidesCopy: Record<string, string> = {};
+  try {
+    const { getPageContent } = await import("@/lib/content/getContent");
+    guidesCopy = await getPageContent("guides");
+  } catch {}
+
   const clusters = [
     "DDA", "Dubai Municipality", "DCD", "Trakhees", "DEWA", 
     "Warehouse", "Mezzanine", "Villa Modification", "Commercial Fit-Out", 
@@ -50,7 +57,7 @@ export default async function GuidesIndexPage() {
           />
           <h1 className="text-4xl md:text-6xl font-display font-bold mb-6">Technical Knowledge Base.</h1>
           <p className="text-xl text-gray-300 leading-relaxed max-w-2xl mb-8">
-            Expert-reviewed guides covering design constraints, MEP regulations, and authority submission procedures across Dubai.
+            {guidesCopy.hero_desc ?? "Expert-reviewed guides covering design constraints, MEP regulations, and authority submission procedures across Dubai."}
           </p>
           
           {/* Client-side Search Mockup (In reality this would be a Client Component wrapping an input) */}
@@ -86,7 +93,7 @@ export default async function GuidesIndexPage() {
           {/* Main Grid */}
           <div className="flex-1">
             <div className="mb-6 flex justify-between items-center border-b border-border-light dark:border-border-dark pb-4">
-              <h2 className="text-2xl font-bold font-display text-ink dark:text-white">Latest Guides</h2>
+              <h2 className="text-2xl font-bold font-display text-ink dark:text-white">{guidesCopy.list_title ?? "Latest Guides"}</h2>
               <span className="text-sm text-gray-500">{allGuides.length} Published</span>
             </div>
 
