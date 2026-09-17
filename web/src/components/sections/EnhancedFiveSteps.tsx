@@ -116,26 +116,31 @@ export default function EnhancedFiveSteps() {
         <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-[#C9A544]/20 rounded-full blur-3xl animate-pulse" />
         <div className="absolute bottom-1/4 right-1/4 w-72 h-72 bg-blue-500/20 rounded-full blur-3xl animate-pulse delay-1000" />
         
-        {/* Floating Elements */}
-        {Array.from({ length: 20 }).map((_, i) => (
-          <motion.div
-            key={i}
-            className="absolute w-2 h-2 bg-[#C9A544]/30 rounded-full"
-            animate={{
-              y: [0, -100, 0],
-              opacity: [0, 1, 0],
-            }}
-            transition={{
-              duration: Math.random() * 6 + 4,
-              repeat: Infinity,
-              delay: Math.random() * 5,
-            }}
-            style={{
-              left: `${Math.random() * 100}%`,
-              top: `${Math.random() * 100}%`,
-            }}
-          />
-        ))}
+        {/* Floating Elements — deterministic */}
+        {Array.from({ length: 20 }).map((_, i) => {
+          const seed = (i * 9301 + 49297) % 233280;
+          const r1 = seed / 233280;
+          const r2 = ((seed * 9301 + 49297) % 233280) / 233280;
+          return (
+            <motion.div
+              key={i}
+              className="absolute w-2 h-2 bg-[#C9A544]/30 rounded-full"
+              animate={{
+                y: [0, -100, 0],
+                opacity: [0, 1, 0],
+              }}
+              transition={{
+                duration: 7 + r1 * 3,
+                repeat: Infinity,
+                delay: r2 * 3,
+              }}
+              style={{
+                left: `${r1 * 100}%`,
+                top: `${r2 * 100}%`,
+              }}
+            />
+          );
+        })}
 
         {/* Process Flow Lines */}
         <svg className="absolute inset-0 w-full h-full opacity-20" viewBox="0 0 1000 1000">

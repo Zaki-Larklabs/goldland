@@ -78,6 +78,7 @@ export function MobileMenu() {
               { label: "Services", href: "/services" },
               { label: "Authority Approvals", href: "/authority-approvals" },
               { label: "Projects", href: "/projects" },
+              { label: "Blog", href: "/blog" },
               { label: "Contact", href: "/contact" },
             ].map((link) => (
               <Link 

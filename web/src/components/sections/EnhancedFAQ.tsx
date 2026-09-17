@@ -105,21 +105,27 @@ export default function EnhancedFAQ({ faqs }: EnhancedFAQProps) {
         <div className="absolute bottom-1/4 left-1/4 w-72 h-72 bg-blue-500/10 rounded-full blur-3xl" />
       </div>
 
-      {/* Question Mark Pattern */}
+      {/* Question Mark Pattern — deterministic */}
       <div className="absolute inset-0 opacity-5">
-        {Array.from({ length: 20 }).map((_, i) => (
-          <div
-            key={i}
-            className="absolute text-[#C9A544] text-4xl font-bold"
-            style={{
-              left: `${Math.random() * 100}%`,
-              top: `${Math.random() * 100}%`,
-              transform: `rotate(${Math.random() * 360}deg)`,
-            }}
-          >
-            ?
-          </div>
-        ))}
+        {Array.from({ length: 20 }).map((_, i) => {
+          const s = (i * 9301 + 49297) % 233280;
+          const a = s / 233280;
+          const b = ((s * 9301 + 49297) % 233280) / 233280;
+          const c = ((s * 15485863) % 233280) / 233280;
+          return (
+            <div
+              key={i}
+              className="absolute text-[#C9A544] text-4xl font-bold"
+              style={{
+                left: `${a * 100}%`,
+                top: `${b * 100}%`,
+                transform: `rotate(${c * 360}deg)`,
+              }}
+            >
+              ?
+            </div>
+          );
+        })}
       </div>
 
       <div className="container mx-auto relative z-10" ref={containerRef}>

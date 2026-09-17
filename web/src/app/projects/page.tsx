@@ -9,18 +9,22 @@ import type { Metadata } from "next";
 import { VideoMaskOverlay } from "@/components/ui/video-mask-overlay";
 import { ProjectCard } from "@/components/cards/ProjectCard";
 
-export const dynamic = "force-dynamic";
+export const revalidate = 3600;
 
-export const metadata: Metadata = {
-  title: "Approved Projects & Case Studies | Goldland Contracting",
-  description: "Browse our portfolio of completed and approved engineering, fit-out, and structural projects across Dubai's major authorities.",
-  alternates: {
-    canonical: "https://goldlandcontracting.ae/projects",
-  },
-};
+import { generateSeoMetadata } from "@/lib/seo/getSeo";
+
+export async function generateMetadata(): Promise<Metadata> {
+  return generateSeoMetadata("/projects", {
+    title: "Approved Projects & Case Studies | Goldland Contracting",
+    description: "Browse our portfolio of completed and approved engineering, fit-out, and structural projects across Dubai's major authorities.",
+  });
+}
 
 export default async function ProjectsIndex() {
   const allProjects = await db.select().from(projects).orderBy(desc(projects.publishedAt));
+  // SEO portal → H1 override (falls back to hardcoded heading)
+  const { getPageHeadings } = await import("@/lib/seo/getSeo");
+  const headings = await getPageHeadings("/projects");
 
   const jsonLd = {
     "@context": "https://schema.org",
@@ -52,7 +56,7 @@ export default async function ProjectsIndex() {
         />
         <VideoMaskOverlay intensity={0.85} />
         <div className="container relative mx-auto max-w-4xl text-center" style={{ zIndex: 5 }}>
-          <h1 className="text-5xl md:text-6xl font-display font-bold mb-6">Real Projects. Real Evidence.</h1>
+          <h1 className="text-5xl md:text-6xl font-display font-bold mb-6">{headings.h1 ?? "Real Projects. Real Evidence."}</h1>
           <p className="text-xl text-gray-300">
             Browse our portfolio of completed and approved engineering and fit-out projects across Dubai.
           </p>
@@ -75,7 +79,7 @@ export default async function ProjectsIndex() {
               ))
             ) : (
               <div className="col-span-full p-12 text-center text-gray-500 border border-dashed rounded-xl">
-                [CMS Placeholder: No projects published yet.]
+                CONTENT_REQUIRES_VERIFICATION
               </div>
             )}
           </div>

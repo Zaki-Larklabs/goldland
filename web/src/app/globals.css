@@ -30,54 +30,54 @@
 
 
 :root{
-  /* --- palette (dark theme) --- */
-  --ink:        #070C1C;   /* near-black navy — page background */
-  --ink-soft:   #0C1530;   /* slightly lifted navy for alternating sections */
-  --blue-panel: #101D3E;   /* secondary navy panel */
-  --blue-line:  #24365E;   /* blueprint grid lines on navy */
-  --panel:      #101B36;   /* card / glass panel base */
-  --glass:      rgba(255,255,255,.045);
-  --glass-hover:rgba(255,255,255,.075);
-  --glass-border: rgba(255,255,255,.09);
-  --vellum:     #F4F0E4;   /* warm off-white — used for the one light accent card */
-  --vellum-dim: #EAE4D3;
-  --brass:      #C9A544;   /* gold/brass — CTAs, accents (brightened for dark bg) */
+  /* --- palette (dark theme) - STITCH ENHANCED --- */
+  --ink:        #0b1326;   /* premium deep slate void */
+  --ink-soft:   #131b2e;   /* surface container low */
+  --blue-panel: #171f33;   /* surface container */
+  --blue-line:  #2d3449;   /* surface variant */
+  --panel:      #222a3d;   /* surface container high */
+  --glass:      rgba(173, 198, 255, .045);
+  --glass-hover:rgba(173, 198, 255, .075);
+  --glass-border: rgba(173, 198, 255, .09);
+  --vellum:     #e9ddff;   /* secondary fixed */
+  --vellum-dim: #d0bcff;
+  --brass:      #C9A544;   /* custom gold accent */
   --brass-lt:   #E7C877;
-  --stamp-red:  #C24A3B;   /* approval stamp ink (brightened for dark bg) */
-  --ink-text:   #1C2333;   /* body text used only inside light accent cards */
-  --paper-text-dim: #5B6070;
-  --text-light: #F1EEE4;   /* primary text colour, dark theme */
-  --text-dim:   rgba(241,238,228,.64);
-  --white:      #FDFBF6;
+  --stamp-red:  #df7412;   /* tertiary container */
+  --ink-text:   #0b1326;   
+  --paper-text-dim: #8c909f;
+  --text-light: #dae2fd;   /* on surface */
+  --text-dim:   #c2c6d6;   /* on surface variant */
+  --white:      #ffffff;
 
   --font-display: 'Space Grotesk', 'IBM Plex Sans', sans-serif;
-  --font-body:    'IBM Plex Sans', sans-serif;
+  --font-body:    'Inter', 'IBM Plex Sans', sans-serif;
   --font-mono:    'IBM Plex Mono', monospace;
 
-  --radius-s: 3px;
-  --radius-m: 6px;
+  --radius-s: 4px;
+  --radius-m: 8px; /* ROUND_EIGHT */
   --max-w: 1240px;
 }
 
 :root.light, .light {
-  /* --- palette (light theme) --- */
+  /* --- palette (light theme) - STITCH ENHANCED --- */
   --ink:        #F8FAFC;   /* light background */
-  --ink-soft:   #F1F5F9;   /* slightly darker light background */
+  --ink-soft:   #F1F5F9;   
   --blue-panel: #E2E8F0;   
   --blue-line:  #CBD5E1;   
   --panel:      #FFFFFF;   
-  --glass:      rgba(0,0,0,.045);
-  --glass-hover:rgba(0,0,0,.075);
-  --glass-border: rgba(0,0,0,.09);
-  --vellum:     #1E293B;   /* dark for accent card */
-  --vellum-dim: #0F172A;
-  --brass:      #B48B2D;   /* slightly darker brass for light bg */
-  --brass-lt:   #C9A544;
-  --stamp-red:  #A63A2E;   /* darker red for contrast */
-  --ink-text:   #F8FAFC;   
-  --paper-text-dim: #CBD5E1;
-  --text-light: #0f172a;   /* dark text for light mode */
-  --text-dim:   rgba(15,23,42,.7);
+  --glass:      rgba(11, 19, 38, .045);
+  --glass-hover:rgba(11, 19, 38, .075);
+  --glass-border: rgba(11, 19, 38, .09);
+  --vellum:     #131b2e;   
+  --vellum-dim: #0b1326;
+  --brass:      #C9A544;   
+  --brass-lt:   #B48B2D;
+  --stamp-red:  #df7412;   
+  --ink-text:   #dae2fd;   
+  --paper-text-dim: #8c909f;
+  --text-light: #0b1326;   /* dark text for light mode */
+  --text-dim:   #424754;
   --white:      #000000;
   
   /* Invert Tailwind default grays for light mode */

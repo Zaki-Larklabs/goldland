@@ -5,13 +5,14 @@ import { Breadcrumbs } from "@/components/layout/Breadcrumbs";
 import { GlobalCta } from "@/components/layout/GlobalCta";
 import { CredentialCard } from "@/components/cards/CredentialCard";
 
-export const metadata: Metadata = {
-  title: "Official Credentials & Licenses | Goldland Contracting",
-  description: "View Goldland Contracting's official Dubai trade licenses, ISO certifications, and authority registrations.",
-  alternates: {
-    canonical: "https://goldlandcontracting.ae/credentials",
-  },
-};
+import { generateSeoMetadata } from "@/lib/seo/getSeo";
+
+export async function generateMetadata(): Promise<Metadata> {
+  return generateSeoMetadata("/credentials", {
+    title: "Official Credentials & Licenses | Goldland Contracting",
+    description: "View Goldland Contracting's official Dubai trade licenses, ISO certifications, and authority registrations.",
+  });
+}
 
 export default function CredentialsPage() {
   return (
@@ -40,24 +41,24 @@ export default function CredentialsPage() {
             <CredentialCard 
               title="Dubai Mainland Trade License"
               issuer="Department of Economy and Tourism (DET)"
-              year="[CMS Placeholder]"
-              credentialNumber="[CMS Placeholder]"
+              year="CONTENT_REQUIRES_VERIFICATION"
+              credentialNumber="CONTENT_REQUIRES_VERIFICATION"
               description="Primary operating license for engineering, contracting, and fit-out activities within Dubai Mainland."
               type="license"
             />
             <CredentialCard 
               title="Dubai Civil Defence (DCD) Registration"
               issuer="Ministry of Interior - DCD"
-              year="[CMS Placeholder]"
-              credentialNumber="[CMS Placeholder]"
+              year="CONTENT_REQUIRES_VERIFICATION"
+              credentialNumber="CONTENT_REQUIRES_VERIFICATION"
               description="Authorized to design, install, and certify fire safety and alarm systems."
               type="license"
             />
             <CredentialCard 
               title="Dubai Municipality (DM) Contractor"
               issuer="Dubai Municipality"
-              year="[CMS Placeholder]"
-              credentialNumber="[CMS Placeholder]"
+              year="CONTENT_REQUIRES_VERIFICATION"
+              credentialNumber="CONTENT_REQUIRES_VERIFICATION"
               description="Registered contracting entity permitted to pull permits for structural and architectural works."
               type="license"
             />
@@ -67,17 +68,17 @@ export default function CredentialsPage() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             <CredentialCard 
               title="ISO 9001:2015 Quality Management"
-              issuer="[CMS Placeholder: Auditing Body]"
-              year="[CMS Placeholder]"
-              credentialNumber="[CMS Placeholder]"
+              issuer="CONTENT_REQUIRES_VERIFICATION"
+              year="CONTENT_REQUIRES_VERIFICATION"
+              credentialNumber="CONTENT_REQUIRES_VERIFICATION"
               description="Certified for consistent quality in project delivery and engineering services."
               type="certification"
             />
             <CredentialCard 
               title="ISO 45001:2018 Occupational Health & Safety"
-              issuer="[CMS Placeholder: Auditing Body]"
-              year="[CMS Placeholder]"
-              credentialNumber="[CMS Placeholder]"
+              issuer="CONTENT_REQUIRES_VERIFICATION"
+              year="CONTENT_REQUIRES_VERIFICATION"
+              credentialNumber="CONTENT_REQUIRES_VERIFICATION"
               description="Certified for robust health, safety, and environmental management systems on active sites."
               type="certification"
             />

@@ -11,14 +11,30 @@ import { Breadcrumbs } from "@/components/layout/Breadcrumbs";
 import { GlobalCta } from "@/components/layout/GlobalCta";
 import { CheckCircle2, MapPin, Building2, Calendar } from "lucide-react";
 
-export const dynamic = "force-dynamic";
+export const revalidate = 3600;
 
 interface PageProps {
   params: Promise<{ slug: string }>;
 }
 
+import { getSeoForRoute } from "@/lib/seo/getSeo";
+import { siteConfig } from "@/lib/seo/config";
+
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { slug } = await params;
+  try {
+    const seo = await getSeoForRoute(`/projects/${slug}`);
+    if (seo && (seo.title || seo.description)) {
+      const keywords = seo.keywords ? seo.keywords.split(",").map((k: string) => k.trim()).filter(Boolean) : undefined;
+      return {
+        title: seo.title || "Goldland Project Case Study",
+        description: seo.description || undefined,
+        keywords,
+        alternates: { canonical: seo.canonical || `${siteConfig.url}/projects/${slug}` },
+        robots: seo.noindex ? { index: false, follow: false } : { index: true, follow: true },
+      };
+    }
+  } catch {}
   const data = await db.select().from(projects).where(eq(projects.slug, slug)).limit(1);
   const project = data[0];
 

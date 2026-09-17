@@ -1,5 +1,8 @@
+"use client";
+
 import * as React from "react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import * as NavigationMenu from "@radix-ui/react-navigation-menu";
 import { ChevronDown } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -12,6 +15,8 @@ const authoritiesList = [
 ];
 
 export function MegaMenu() {
+  const pathname = usePathname();
+  const isActive = (href: string) => pathname === href || pathname?.startsWith(href + "/");
   return (
     <NavigationMenu.Root className="relative z-10 flex max-w-max flex-1 items-center justify-center hidden lg:flex">
       <NavigationMenu.List className="group flex flex-1 list-none items-center justify-center space-x-1">
@@ -54,7 +59,7 @@ export function MegaMenu() {
 
         <NavigationMenu.Item>
           <NavigationMenu.Link asChild>
-            <Link href="/services" className="group inline-flex h-10 w-max items-center justify-center rounded-md bg-transparent px-4 py-2 text-sm font-medium transition-colors hover:bg-white/10 focus:bg-white/10 focus:outline-none text-[#F1EEE4] hover:text-white">
+            <Link href="/services" aria-current={isActive("/services") ? "page" : undefined} className={cn("group inline-flex h-10 w-max items-center justify-center rounded-md bg-transparent px-4 py-2 text-sm font-medium transition-colors hover:bg-white/10 focus:bg-white/10 focus:outline-none text-[#F1EEE4] hover:text-white", isActive("/services") && "text-[#C9A544] underline decoration-[#C9A544] underline-offset-8 decoration-2")}>
               Services
             </Link>
           </NavigationMenu.Link>
@@ -64,6 +69,13 @@ export function MegaMenu() {
           <NavigationMenu.Link asChild>
             <Link href="/projects" className="group inline-flex h-10 w-max items-center justify-center rounded-md bg-transparent px-4 py-2 text-sm font-medium transition-colors hover:bg-white/10 focus:bg-white/10 focus:outline-none text-[#F1EEE4] hover:text-white">
               Projects
+            </Link>
+          </NavigationMenu.Link>
+        </NavigationMenu.Item>
+        <NavigationMenu.Item>
+          <NavigationMenu.Link asChild>
+            <Link href="/blog" aria-current={isActive("/blog") ? "page" : undefined} className={cn("group inline-flex h-10 w-max items-center justify-center rounded-md bg-transparent px-4 py-2 text-sm font-medium transition-colors hover:bg-white/10 focus:bg-white/10 focus:outline-none text-[#F1EEE4] hover:text-white", isActive("/blog") && "text-[#C9A544] underline decoration-[#C9A544] underline-offset-8 decoration-2")}>
+              Blog
             </Link>
           </NavigationMenu.Link>
         </NavigationMenu.Item>

@@ -1,5 +1,5 @@
 import { db } from "@/lib/db";
-import { authorities, projects } from "@/lib/db/schema";
+import { authorities, projects, services, reviews, faqs } from "@/lib/db/schema";
 import { eq } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 
@@ -38,6 +38,42 @@ export async function deleteAuthority(id: string) {
   }
 }
 
+
+export async function createService(formData: FormData) {
+  "use server";
+  const id = `svc-${Date.now()}`;
+  const name = formData.get("name") as string;
+  const slug = (formData.get("slug") as string)?.toLowerCase().replace(/\s+/g,"-");
+  const category = (formData.get("category") as string) || "Engineering";
+  const description = formData.get("description") as string;
+  try { await db.insert(services).values({ id, name, slug, category, description }); revalidatePath("/admin"); return { success: true }; } catch(e){ return { success:false, error:String(e)}; }
+}
+export async function deleteService(id: string) {
+  "use server"; try { await db.delete(services).where(eq(services.id, id)); revalidatePath("/admin"); return { success:true }; } catch(e){ return {success:false, error:String(e)}; }
+}
+export async function createProject(formData: FormData) {
+  "use server";
+  const id = `proj-${Date.now()}`;
+  const title = formData.get("title") as string;
+  const slug = (formData.get("slug") as string)?.toLowerCase().replace(/\s+/g,"-");
+  const location = formData.get("location") as string;
+  const approvalStatus = formData.get("approvalStatus") as string;
+  try { await db.insert(projects).values({ id, title, slug, location, approvalStatus, publishedAt: new Date() }); revalidatePath("/admin"); return { success:true }; } catch(e){ return {success:false, error:String(e)}; }
+}
+export async function deleteProject(id: string) {
+  "use server"; try { await db.delete(projects).where(eq(projects.id, id)); revalidatePath("/admin"); return { success:true }; } catch(e){ return {success:false, error:String(e)}; }
+}
+export async function createReview(formData: FormData) {
+  "use server";
+  const id = `rev-${Date.now()}`;
+  const reviewerName = formData.get("reviewerName") as string;
+  const rating = parseInt((formData.get("rating") as string)||"5");
+  const content = formData.get("content") as string;
+  try { await db.insert(reviews).values({ id, reviewerName, rating, content, isVerified:true }); revalidatePath("/admin"); return { success:true }; } catch(e){ return {success:false, error:String(e)}; }
+}
+export async function deleteReview(id: string) {
+  "use server"; try { await db.delete(reviews).where(eq(reviews.id, id)); revalidatePath("/admin"); return { success:true }; } catch(e){ return {success:false, error:String(e)}; }
+}
 
 export async function seedDefaultAuthorities() {
   "use server";

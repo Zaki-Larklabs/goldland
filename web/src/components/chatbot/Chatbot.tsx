@@ -85,18 +85,9 @@ export function Chatbot() {
   const [showTooltip, setShowTooltip] = useState(false);
   const [showContactTooltip, setShowContactTooltip] = useState(false);
 
-  // ── INDEPENDENT FLOATABLE POSITIONS (do not move together) ─────────────
-  // Default positions are set immediately so FABs are visible on first render
-  const defaultChatPos = () => typeof window !== "undefined"
-    ? { x: window.innerWidth - 72 - 16, y: window.innerHeight - 72 - 16 }
-    : { x: 9999, y: 9999 }; // will be corrected on mount
-
-  const defaultContactPos = () => typeof window !== "undefined"
-    ? { x: window.innerWidth - 72 - 16, y: window.innerHeight - 72 - 84 }
-    : { x: 9999, y: 9999 };
-
-  const [chatPos, setChatPos] = useState<{ x: number; y: number }>(() => defaultChatPos());
-  const [contactPos, setContactPos] = useState<{ x: number; y: number }>(() => defaultContactPos());
+  // ── INDEPENDENT FLOATABLE POSITIONS (SSR-safe: consistent initial 9999, corrected after mount)
+  const [chatPos, setChatPos] = useState<{ x: number; y: number }>({ x: 9999, y: 9999 });
+  const [contactPos, setContactPos] = useState<{ x: number; y: number }>({ x: 9999, y: 9999 });
   const [posReady, setPosReady] = useState(false);
   const chatDrag = useRef({ dragging: false, startX: 0, startY: 0, origX: 0, origY: 0, moved: false });
   const contactDrag = useRef({ dragging: false, startX: 0, startY: 0, origX: 0, origY: 0, moved: false });
@@ -116,7 +107,7 @@ export function Chatbot() {
     const savedContact = localStorage.getItem("goldland_contact_pos");
 
     const defaultChat = { x: vw - 72 - 16, y: vh - 72 - 16 };
-    const defaultContact = { x: vw - 72 - 16, y: vh - 72 - 84 };
+    const defaultContact = { x: 24, y: vh - 72 - 16 };
 
     if (savedChat) {
       try {
@@ -328,7 +319,8 @@ export function Chatbot() {
     <>
       {/* ── INDEPENDENTLY DRAGGABLE: CHAT FAB (gold) ── */}
       <div
-        style={{ left: chatPos.x, top: chatPos.y, position: "fixed", opacity: posReady ? 1 : 0 }}
+        suppressHydrationWarning
+        style={{ left: chatPos.x, top: chatPos.y, position: "fixed", opacity: posReady ? 1 : 0 } as React.CSSProperties}
         className="z-[9999] select-none touch-none transition-opacity duration-200"
       >
         <button
@@ -386,7 +378,8 @@ export function Chatbot() {
 
       {/* ── INDEPENDENTLY DRAGGABLE: CONTACT STACK (phone/whatsapp/sparkle) ── */}
       <div
-        style={{ left: contactPos.x, top: contactPos.y, position: "fixed", opacity: posReady ? 1 : 0 }}
+        suppressHydrationWarning
+        style={{ left: contactPos.x, top: contactPos.y, position: "fixed", opacity: posReady ? 1 : 0 } as React.CSSProperties}
         className="z-[9999] select-none touch-none transition-opacity duration-200"
       >
         <div

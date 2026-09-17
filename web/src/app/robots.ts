@@ -1,7 +1,11 @@
 import { MetadataRoute } from 'next'
 import { siteConfig } from '@/lib/seo/config'
 
-export default function robots(): MetadataRoute.Robots {
+export const revalidate = 3600;
+
+export default async function robots(): Promise<MetadataRoute.Robots> {
+  // Allow DB seoRecords with noindex to also be reflected via dynamic disallow (optional)
+  // For now keep static rules — sitemap already filters noindex, robots respects sitemap exclusion.
   return {
     rules: {
       userAgent: '*',
@@ -9,8 +13,8 @@ export default function robots(): MetadataRoute.Robots {
       disallow: [
         '/api/',
         '/admin/',
-        '/*?*utm_source=', // Prevent indexing URLs with tracking parameters
-        '/*?*cluster=' // Prevent indexing parameterized filter URLs to avoid duplicate content
+        '/*?*utm_source=',
+        '/*?*cluster='
       ],
     },
     sitemap: `${siteConfig.url}/sitemap.xml`,

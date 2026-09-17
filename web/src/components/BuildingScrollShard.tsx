@@ -110,23 +110,37 @@ export default function BuildingScrollShard() {
   const [showHint,   setShowHint]   = useState(true);
   const [isMobile,   setIsMobile]   = useState(false);
   const [isInView,   setIsInView]   = useState(true); // true on mount (section is at top)
+  const [shouldLoad, setShouldLoad] = useState(false);
 
-  // ── Load all frames ────────────────────────────────────────────────────────
+  // ── Defer frame loading until near viewport (200px threshold) — saves 24MB on initial LCP ──
+  useEffect(() => {
+    const el = outerRef.current;
+    if (!el) return;
+    const obs = new IntersectionObserver(([e]) => { if (e.isIntersecting) { setShouldLoad(true); obs.disconnect(); } }, { rootMargin: "400px" });
+    obs.observe(el);
+    return () => obs.disconnect();
+  }, []);
+
+  // ── Load all frames (deferred) ─────────────────────────────────────────────
   // Loads in REVERSE order: imgs[0] = shard_frame_149, imgs[149] = shard_frame_0
   // So scrolling from 0→1 shows the sequence REVERSED (149→0)
   useEffect(() => {
+    if (!shouldLoad) return;
     const list: HTMLImageElement[] = [];
     let done = 0;
     for (let n = 0; n < TOTAL; n++) {
       const img   = new Image();
+      (img as any).decoding = "async";
+      (img as any).fetchPriority = "low";
       const frameN = TOTAL - 1 - n; // REVERSED: n=0 loads frame 149, n=149 loads frame 0
+      const paddedFrame = String(frameN).padStart(3, '0');
       img.onload = img.onerror = () => { done++; setLoadedCount(done); };
-      img.src = `/shard/shard_frame_${frameN}.jpg`;
+      img.src = `/shard_frames/SaveClip.App_AQP-L4rTlIYou_5UBjdXftOOEVCNBW7ZiB7lhJp44-QIYlZ0Vz9Um1YcEjkgQESOq4uuwkiYV_AUYStpitViA1QFnfhfUFAJmKZycPc_${paddedFrame}.jpg`;
       list.push(img);
     }
     imgs.current = list;
     return () => { list.forEach(i => { i.onload = null; i.onerror = null; }); };
-  }, []);
+  }, [shouldLoad]);
 
   // ── Mobile detection ───────────────────────────────────────────────────────
   useEffect(() => {

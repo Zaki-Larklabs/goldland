@@ -121,7 +121,7 @@ export default function BuildingScroll() {
       const img   = new Image();
       const frameN = String(n).padStart(3, '0');
       img.onload = img.onerror = () => { done++; setLoadedCount(done); };
-      img.src = `/home_scroll/i_need_an_exact_video_and_pls_${frameN}.jpg`;
+      img.src = `/home_scroll/i_need_an_exact_video_and_pls_000/i_need_an_exact_video_and_pls_${frameN}.jpg`;
       list.push(img);
     }
     imgs.current = list;

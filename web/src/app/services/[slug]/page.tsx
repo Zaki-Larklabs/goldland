@@ -13,14 +13,39 @@ import { ProjectCard } from "@/components/cards/ProjectCard";
 import { FAQAccordion } from "@/components/interactive/FAQAccordion";
 import { AlertTriangle, HardHat, Compass, FileCheck } from "lucide-react";
 
-export const dynamic = "force-dynamic";
+export const revalidate = 3600;
 
 interface PageProps {
   params: Promise<{ slug: string }>;
 }
 
+import { getSeoForRoute } from "@/lib/seo/getSeo";
+import { siteConfig } from "@/lib/seo/config";
+
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { slug } = await params;
+  const route = `/services/${slug}`;
+  // 0. SEO Portal override wins (lets SEO team edit title/desc/keywords without code deploys)
+  try {
+    const seo = await getSeoForRoute(route);
+    if (seo && (seo.title || seo.description)) {
+      const keywords = seo.keywords ? seo.keywords.split(",").map((k: string) => k.trim()).filter(Boolean) : undefined;
+      return {
+        title: seo.title || `${slug} Services in Dubai | Goldland Contracting`,
+        description: seo.description || undefined,
+        keywords,
+        alternates: { canonical: seo.canonical || `${siteConfig.url}${route}` },
+        robots: seo.noindex ? { index: false, follow: false } : { index: true, follow: true },
+        openGraph: {
+          title: seo.title || `${slug} Services in Dubai | Goldland Contracting`,
+          description: seo.description || undefined,
+          url: seo.canonical || `${siteConfig.url}${route}`,
+          type: "article",
+          images: [{ url: seo.ogImage || siteConfig.ogImage, width: 1200, height: 630 }],
+        },
+      };
+    }
+  } catch {}
   const data = await db.select().from(services).where(eq(services.slug, slug)).limit(1);
   const service = data[0];
 
@@ -120,7 +145,7 @@ export default async function ServicePage({ params }: PageProps) {
           <h2 className="text-3xl font-display font-bold text-ink dark:text-white mb-8">Service Overview</h2>
           <div className="prose prose-lg dark:prose-invert max-w-none text-gray-600 dark:text-gray-300">
             <p>
-              [CMS Placeholder: Detailed explanation of the {service.name} service offering. Explains the methodology, standards used (like Dubai Building Code), and software utilized (AutoCAD, Revit).]
+              CONTENT_REQUIRES_VERIFICATION
             </p>
             <p>
               Goldland guarantees that all outputs from our {service.name.toLowerCase()} department are fully compliant with the latest jurisdiction-specific mandates.
@@ -135,7 +160,7 @@ export default async function ServicePage({ params }: PageProps) {
           <div className="text-center mb-12">
             <h2 className="text-3xl font-display font-bold text-ink dark:text-white mb-4">Relevant Authorities</h2>
             <p className="text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
-              [CMS Placeholder: Requires specific join-table filtering to show only authorities relevant to {service.name}. Displaying global authorities.]
+              CONTENT_REQUIRES_VERIFICATION
             </p>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -159,7 +184,7 @@ export default async function ServicePage({ params }: PageProps) {
           <div className="text-center mb-12">
             <h2 className="text-3xl font-display font-bold text-ink dark:text-white mb-4">Applied Projects</h2>
             <p className="text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
-              [CMS Placeholder: Requires specific join-table filtering. Displaying recent global projects where {service.name} was applied.]
+              CONTENT_REQUIRES_VERIFICATION
             </p>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">

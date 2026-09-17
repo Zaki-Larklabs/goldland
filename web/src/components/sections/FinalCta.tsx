@@ -17,20 +17,26 @@ export default function FinalCta() {
       <div className="absolute inset-0 bg-gradient-to-br from-black/80 via-black/60 to-black/90" />
       <div className="absolute inset-0 bg-gradient-to-t from-[#C9A544]/10 via-transparent to-transparent" />
       
-      {/* Floating Particles */}
+      {/* Floating Particles — deterministic */}
       <div className="absolute inset-0 overflow-hidden">
-        {Array.from({ length: 30 }).map((_, i) => (
-          <div
-            key={i}
-            className="absolute w-1 h-1 bg-[#C9A544] rounded-full animate-pulse"
-            style={{
-              left: `${Math.random() * 100}%`,
-              top: `${Math.random() * 100}%`,
-              animationDelay: `${Math.random() * 3}s`,
-              animationDuration: `${2 + Math.random() * 3}s`,
-            }}
-          />
-        ))}
+        {Array.from({ length: 30 }).map((_, i) => {
+          const s = (i * 9301 + 49297) % 233280;
+          const r1 = s / 233280;
+          const r2 = ((s * 9301 + 49297) % 233280) / 233280;
+          const r3 = ((s * 15485863) % 233280) / 233280;
+          return (
+            <div
+              key={i}
+              className="absolute w-1 h-1 bg-[#C9A544] rounded-full animate-pulse"
+              style={{
+                left: `${r1 * 100}%`,
+                top: `${r2 * 100}%`,
+                animationDelay: `${r3 * 3}s`,
+                animationDuration: `${2 + r1 * 3}s`,
+              }}
+            />
+          );
+        })}
       </div>
 
       <div className="container mx-auto relative z-10 max-w-4xl text-center">

@@ -9,15 +9,16 @@ import { GlobalCta } from "@/components/layout/GlobalCta";
 import { ReviewCard } from "@/components/cards/ReviewCard";
 import { BadgeCheck, ShieldAlert } from "lucide-react";
 
-export const dynamic = "force-dynamic";
+export const revalidate = 3600;
 
-export const metadata: Metadata = {
-  title: "Verified Client Reviews | Goldland Contracting",
-  description: "Read verified feedback from our commercial, industrial, and residential fit-out clients across Dubai.",
-  alternates: {
-    canonical: "https://goldlandcontracting.ae/reviews",
-  },
-};
+import { generateSeoMetadata } from "@/lib/seo/getSeo";
+
+export async function generateMetadata(): Promise<Metadata> {
+  return generateSeoMetadata("/reviews", {
+    title: "Verified Client Reviews | Goldland Contracting",
+    description: "Read verified feedback from our commercial, industrial, and residential fit-out clients across Dubai.",
+  });
+}
 
 export default async function ReviewsPage() {
   // Only fetch explicitly verified reviews
@@ -79,7 +80,7 @@ export default async function ReviewsPage() {
                   rating={review.rating}
                   isVerified={review.isVerified}
                   // Using placeholder data for these fields until schema is updated
-                  source="[CMS Placeholder]" 
+                  source="CONTENT_REQUIRES_VERIFICATION" 
                   permissionStatus="granted"
                 />
               ))

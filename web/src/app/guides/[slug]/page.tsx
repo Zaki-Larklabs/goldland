@@ -13,14 +13,31 @@ import { ProjectCard } from "@/components/cards/ProjectCard";
 import Script from "next/script";
 import { CheckCircle2, Calendar, User, ShieldCheck } from "lucide-react";
 
-export const dynamic = "force-dynamic";
+export const revalidate = 3600;
 
 interface PageProps {
   params: Promise<{ slug: string }>;
 }
 
+import { getSeoForRoute } from "@/lib/seo/getSeo";
+import { siteConfig } from "@/lib/seo/config";
+
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { slug } = await params;
+  // SEO Portal override wins (also covers /blog/${slug} twin via portal if set)
+  try {
+    const seo = await getSeoForRoute(`/guides/${slug}`);
+    if (seo && (seo.title || seo.description)) {
+      const keywords = seo.keywords ? seo.keywords.split(",").map((k: string) => k.trim()).filter(Boolean) : undefined;
+      return {
+        title: seo.title || "Goldland Technical Guide",
+        description: seo.description || undefined,
+        keywords,
+        alternates: { canonical: seo.canonical || `${siteConfig.url}/guides/${slug}` },
+        robots: seo.noindex ? { index: false, follow: false } : { index: true, follow: true },
+      };
+    }
+  } catch {}
   const data = await db.select().from(guides).where(eq(guides.slug, slug)).limit(1);
   const guide = data[0];
 
@@ -67,7 +84,7 @@ export default async function GuideDetailPage({ params }: PageProps) {
     "dateModified": guide.publishedAt ? guide.publishedAt.toISOString() : new Date().toISOString(),
     "author": {
       "@type": "Person",
-      "name": "[CMS Placeholder: Author Name]"
+      "name": "CONTENT_REQUIRES_VERIFICATION"
     },
     "publisher": {
       "@type": "Organization",
@@ -103,11 +120,11 @@ export default async function GuideDetailPage({ params }: PageProps) {
           <div className="flex flex-wrap items-center gap-6 p-4 bg-white/5 rounded-lg border border-white/10 text-sm">
             <div className="flex items-center gap-2 text-gray-300">
               <User className="h-4 w-4 text-brass" />
-              <span>Author: <strong className="text-white">[CMS Placeholder]</strong></span>
+              <span>Author: <strong className="text-white">CONTENT_REQUIRES_VERIFICATION</strong></span>
             </div>
             <div className="flex items-center gap-2 text-gray-300">
               <ShieldCheck className="h-4 w-4 text-green-500" />
-              <span>Technical Reviewer: <strong className="text-white">[CMS Placeholder]</strong></span>
+              <span>Technical Reviewer: <strong className="text-white">CONTENT_REQUIRES_VERIFICATION</strong></span>
             </div>
             <div className="flex items-center gap-2 text-gray-300">
               <Calendar className="h-4 w-4 text-brass" />
@@ -133,7 +150,7 @@ export default async function GuideDetailPage({ params }: PageProps) {
             {/* Guide Specific FAQs placeholder */}
             <div>
               <h3 className="text-2xl font-bold mb-6 font-display text-ink dark:text-white">Related Questions</h3>
-              <p className="text-gray-500">[CMS Placeholder: FAQAccordion configured to fetch guide-specific Q&A]</p>
+              <p className="text-gray-500">CONTENT_REQUIRES_VERIFICATION</p>
             </div>
           </article>
 

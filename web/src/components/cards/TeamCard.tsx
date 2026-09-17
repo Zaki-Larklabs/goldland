@@ -43,7 +43,7 @@ export function TeamCard({ name, role, department, bio, imageUrl, isVerified, li
       </CardHeader>
       <CardContent className="pt-4 flex-grow">
         <p className="text-sm text-gray-600 dark:text-gray-300 leading-relaxed line-clamp-4">
-          {bio || "[CMS Placeholder: Engineering bio highlighting technical qualifications and authority jurisdiction experience.]"}
+          {bio || "CONTENT_REQUIRES_VERIFICATION"}
         </p>
       </CardContent>
     </Card>

@@ -64,6 +64,8 @@ export function Footer() {
               <li><Link href="/about" className="text-gray-600 hover:text-ink dark:text-gray-400 dark:hover:text-white transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brass rounded px-1 -ml-1">About Us</Link></li>
               <li><Link href="/services" className="text-gray-600 hover:text-ink dark:text-gray-400 dark:hover:text-white transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brass rounded px-1 -ml-1">Services</Link></li>
               <li><Link href="/authority-approvals" className="text-gray-600 hover:text-ink dark:text-gray-400 dark:hover:text-white transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brass rounded px-1 -ml-1">Approvals</Link></li>
+              <li><Link href="/blog" className="text-gray-600 hover:text-ink dark:text-gray-400 dark:hover:text-white transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brass rounded px-1 -ml-1">Blog</Link></li>
+              <li><Link href="/guides" className="text-gray-600 hover:text-ink dark:text-gray-400 dark:hover:text-white transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brass rounded px-1 -ml-1">Guides</Link></li>
               <li><Link href="/contact" className="text-gray-600 hover:text-ink dark:text-gray-400 dark:hover:text-white transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brass rounded px-1 -ml-1">Contact</Link></li>
             </ul>
           </div>

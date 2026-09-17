@@ -211,7 +211,7 @@ export default function PremiumScroll2() {
       const img = new Image();
       const frameN = String(n).padStart(3, '0'); // Format as 000, 001, etc.
       img.onload = img.onerror = () => { done++; setLoadedCount(done); };
-      img.src = `/about_scroll_2/Architectural_transformation_ani…_1080p_202609031502_${frameN}.jpg`;
+      img.src = `/about_scroll_2/Architectural_transformation_ani._1080p_202609031502_000/Architectural_transformation_ani._1080p_202609031502_${frameN}.jpg`;
       list.push(img);
     }
     imgs.current = list;
@@ -393,7 +393,7 @@ export default function PremiumScroll2() {
             width: "100%", 
             height: "100%", 
             display: "block",
-            backgroundImage: "url('/about_scroll_2/Architectural_transformation_ani…_1080p_202609031502_000.jpg')",
+            backgroundImage: "url('/about_scroll_2/Architectural_transformation_ani._1080p_202609031502_000/Architectural_transformation_ani._1080p_202609031502_000.jpg')",
             backgroundSize: "cover",
             backgroundPosition: "center"
           }}

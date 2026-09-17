@@ -120,30 +120,36 @@ export default function EnhancedReviews() {
           }}
         />
         
-        {/* Floating Stars */}
-        {Array.from({ length: 15 }).map((_, i) => (
-          <motion.div
-            key={i}
-            className="absolute text-[#C9A544] opacity-30"
-            animate={{
-              y: [0, -30, 0],
-              rotate: [0, 180, 360],
-              opacity: [0.3, 0.8, 0.3],
-            }}
-            transition={{
-              duration: Math.random() * 8 + 6,
-              repeat: Infinity,
-              delay: Math.random() * 5,
-            }}
-            style={{
-              left: `${Math.random() * 100}%`,
-              top: `${Math.random() * 100}%`,
-              fontSize: `${Math.random() * 16 + 8}px`
-            }}
-          >
-            ⭐
-          </motion.div>
-        ))}
+        {/* Floating Stars — deterministic to avoid hydration mismatch */}
+        {Array.from({ length: 15 }).map((_, i) => {
+          const seed = (i * 9301 + 49297) % 233280;
+          const r1 = seed / 233280;
+          const r2 = ((seed * 9301 + 49297) % 233280) / 233280;
+          const r3 = ((seed * 15485863) % 233280) / 233280;
+          return (
+            <motion.div
+              key={i}
+              className="absolute text-[#C9A544] opacity-30"
+              animate={{
+                y: [0, -30, 0],
+                rotate: [0, 180, 360],
+                opacity: [0.3, 0.8, 0.3],
+              }}
+              transition={{
+                duration: 10 + r1 * 4,
+                repeat: Infinity,
+                delay: r2 * 3,
+              }}
+              style={{
+                left: `${r1 * 100}%`,
+                top: `${r2 * 100}%`,
+                fontSize: `${8 + r3 * 12}px`,
+              }}
+            >
+              ⭐
+            </motion.div>
+          );
+        })}
       </div>
 
       <div className="container mx-auto relative z-10" ref={containerRef}>

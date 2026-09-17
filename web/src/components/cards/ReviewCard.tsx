@@ -43,7 +43,7 @@ export function ReviewCard({ reviewerName, content, rating = 5, isVerified, sour
           {permissionStatus === "anonymous" ? "Verified Client (Name Withheld)" : reviewerName}
         </div>
         <div className="flex justify-between items-center text-xs text-gray-500">
-          <span>Source: {source || "[CMS Placeholder]"}</span>
+          <span>Source: {source || "CONTENT_REQUIRES_VERIFICATION"}</span>
           <span className="uppercase tracking-wider">Perm: {permissionStatus}</span>
         </div>
       </CardContent>

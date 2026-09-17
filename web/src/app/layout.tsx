@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Space_Grotesk, IBM_Plex_Sans, IBM_Plex_Mono } from "next/font/google";
+import { Space_Grotesk, Inter, IBM_Plex_Mono } from "next/font/google";
 import "./globals.css";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
@@ -13,21 +13,21 @@ import { RealtimeLeadToaster } from "@/components/ui/RealtimeLeadToaster";
 const localBusinessSchema = {
   "@context": "https://schema.org",
   "@type": "LocalBusiness",
-  "name": "Goldland Contracting LLC",
+  "name": "Goldland Contracting L.L.C.",
   "image": "https://goldlandcontracting.ae/images/og-image.jpg",
   "@id": "https://goldlandcontracting.ae",
   "url": "https://goldlandcontracting.ae",
   "telephone": "+971566321734",
-  "email": "info@goldlandcontracting.ae",
+  "email": "sales@goldlandcontracting.ae",
   "address": {
     "@type": "PostalAddress",
-    "streetAddress": "Dubai",
+    "streetAddress": "Office 102, Abdulla Khalifa Bldg, Al Qusais Industrial Area 1, Damascus Street",
     "addressLocality": "Dubai",
     "addressRegion": "Dubai",
     "addressCountry": "AE"
   },
-  "areaServed": "Dubai",
-  "description": "Expert Dubai Authority Approvals, Engineering, Design, Fit-Out and Project Management."
+  "areaServed": { "@type": "City", name: "Dubai" },
+  "description": "Goldland Contracting L.L.C. — engineering-led authority approvals, design and project delivery across Dubai. One team from drawings to NOC."
 };
 
 const spaceGrotesk = Space_Grotesk({
@@ -37,10 +37,9 @@ const spaceGrotesk = Space_Grotesk({
   preload: true,
 });
 
-const ibmPlexSans = IBM_Plex_Sans({
+const interFont = Inter({
   variable: "--font-body",
   subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
   display: "swap",
   preload: true,
 });
@@ -109,7 +108,7 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body
-        className={`${spaceGrotesk.variable} ${ibmPlexSans.variable} ${ibmPlexMono.variable} antialiased min-h-screen flex flex-col`}
+        className={`${spaceGrotesk.variable} ${interFont.variable} ${ibmPlexMono.variable} antialiased min-h-screen flex flex-col`}
       >
         <script
           type="application/ld+json"

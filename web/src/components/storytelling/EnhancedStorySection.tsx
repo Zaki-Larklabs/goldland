@@ -134,28 +134,34 @@ export default function EnhancedStorySection() {
         }}
       />
 
-      {/* Floating Particles */}
+      {/* Floating Particles — deterministic */}
       <div className="absolute inset-0 overflow-hidden">
-        {Array.from({ length: 50 }).map((_, i) => (
-          <motion.div
-            key={i}
-            className="absolute w-1 h-1 bg-[#C9A544] rounded-full"
-            animate={{
-              y: [0, -100, 0],
-              x: [0, Math.random() * 200 - 100, 0],
-              opacity: [0, 1, 0],
-            }}
-            transition={{
-              duration: Math.random() * 10 + 10,
-              repeat: Infinity,
-              delay: Math.random() * 5,
-            }}
-            style={{
-              left: `${Math.random() * 100}%`,
-              top: `${Math.random() * 100}%`,
-            }}
-          />
-        ))}
+        {Array.from({ length: 50 }).map((_, i) => {
+          const s = (i * 9301 + 49297) % 233280;
+          const r1 = s / 233280;
+          const r2 = ((s * 9301 + 49297) % 233280) / 233280;
+          const r3 = ((s * 15485863) % 233280) / 233280;
+          return (
+            <motion.div
+              key={i}
+              className="absolute w-1 h-1 bg-[#C9A544] rounded-full"
+              animate={{
+                y: [0, -100, 0],
+                x: [0, r1 * 200 - 100, 0],
+                opacity: [0, 1, 0],
+              }}
+              transition={{
+                duration: 10 + r2 * 6,
+                repeat: Infinity,
+                delay: r3 * 3,
+              }}
+              style={{
+                left: `${r1 * 100}%`,
+                top: `${r2 * 100}%`,
+              }}
+            />
+          );
+        })}
       </div>
 
       {/* Main Content */}

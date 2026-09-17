@@ -9,15 +9,16 @@ import { GlobalCta } from "@/components/layout/GlobalCta";
 import { TeamCard } from "@/components/cards/TeamCard";
 import { ShieldCheck } from "lucide-react";
 
-export const dynamic = "force-dynamic";
+export const revalidate = 3600;
 
-export const metadata: Metadata = {
-  title: "Engineering Team | Goldland Contracting",
-  description: "Meet the verified engineers, architects, and project managers leading Goldland's fit-out and authority approval operations in Dubai.",
-  alternates: {
-    canonical: "https://goldlandcontracting.ae/team",
-  },
-};
+import { generateSeoMetadata } from "@/lib/seo/getSeo";
+
+export async function generateMetadata(): Promise<Metadata> {
+  return generateSeoMetadata("/team", {
+    title: "Engineering Team | Goldland Contracting",
+    description: "Meet the verified engineers, architects, and project managers leading Goldland's fit-out and authority approval operations in Dubai.",
+  });
+}
 
 export default async function TeamPage() {
   const members = await db.select().from(teamMembers).where(eq(teamMembers.isVerified, true));
@@ -72,7 +73,7 @@ export default async function TeamPage() {
               ))
             ) : (
               <div className="col-span-full p-12 text-center text-gray-500 border border-dashed rounded-xl">
-                [CMS Placeholder: No verified team members published yet.]
+                CONTENT_REQUIRES_VERIFICATION
               </div>
             )}
           </div>

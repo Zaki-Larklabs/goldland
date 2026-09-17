@@ -12,14 +12,30 @@ import { ProjectCard } from "@/components/cards/ProjectCard";
 import { FAQAccordion } from "@/components/interactive/FAQAccordion";
 import { CheckCircle2, AlertTriangle, FileText, Settings, Building2 } from "lucide-react";
 
-export const dynamic = "force-dynamic";
+export const revalidate = 3600;
 
 interface PageProps {
   params: Promise<{ slug: string }>;
 }
 
+import { getSeoForRoute } from "@/lib/seo/getSeo";
+import { siteConfig } from "@/lib/seo/config";
+
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { slug } = await params;
+  try {
+    const seo = await getSeoForRoute(`/project-approvals/${slug}`);
+    if (seo && (seo.title || seo.description)) {
+      const keywords = seo.keywords ? seo.keywords.split(",").map((k: string) => k.trim()).filter(Boolean) : undefined;
+      return {
+        title: seo.title || "Goldland Project Approval Guide",
+        description: seo.description || undefined,
+        keywords,
+        alternates: { canonical: seo.canonical || `${siteConfig.url}/project-approvals/${slug}` },
+        robots: seo.noindex ? { index: false, follow: false } : { index: true, follow: true },
+      };
+    }
+  } catch {}
   const data = await db.select().from(projectTypes).where(eq(projectTypes.slug, slug)).limit(1);
   const projectType = data[0];
 
@@ -103,7 +119,7 @@ export default async function ProjectApprovalPage({ params }: PageProps) {
           <div>
             <h2 className="text-2xl font-display font-bold text-ink dark:text-white mb-4">Project Overview</h2>
             <p className="text-gray-600 dark:text-gray-300 leading-relaxed">
-              [CMS Placeholder: General description of {projectType.name} and why structural/MEP compliance is strictly enforced by Dubai authorities. This paragraph outlines the core scope of work generally expected.]
+              CONTENT_REQUIRES_VERIFICATION
             </p>
           </div>
           <div>
@@ -158,7 +174,7 @@ export default async function ProjectApprovalPage({ params }: PageProps) {
               </div>
               <h3 className="text-xl font-bold mb-4 text-ink dark:text-white">Design Parameters</h3>
               <p className="text-gray-600 dark:text-gray-300">
-                [CMS Placeholder: Outline space planning restrictions, ceiling heights, aesthetic guidelines enforced by master developers (e.g. Nakheel/Emaar) for {projectType.name}.]
+                CONTENT_REQUIRES_VERIFICATION
               </p>
             </div>
             <div className="bg-white dark:bg-ink-soft p-8 rounded-xl border border-border-light dark:border-border-dark">
@@ -167,7 +183,7 @@ export default async function ProjectApprovalPage({ params }: PageProps) {
               </div>
               <h3 className="text-xl font-bold mb-4 text-ink dark:text-white">Engineering (MEP/Civil)</h3>
               <p className="text-gray-600 dark:text-gray-300">
-                [CMS Placeholder: Outline structural load constraints, HVAC ducting rules, electrical load schedules, and fire sprinkler requirements for {projectType.name}.]
+                CONTENT_REQUIRES_VERIFICATION
               </p>
             </div>
           </div>
@@ -196,7 +212,7 @@ export default async function ProjectApprovalPage({ params }: PageProps) {
               <h2 className="text-3xl font-display font-bold">Primary Authorities</h2>
             </div>
             <p className="text-gray-300 mb-6 leading-relaxed">
-              [CMS Placeholder: Explain which authorities typically handle this project. E.g. "Inside JAFZA, Trakhees EHS handles approvals. In mainland, Dubai Municipality and DCD are required."]
+              CONTENT_REQUIRES_VERIFICATION
             </p>
           </div>
         </div>
@@ -208,11 +224,11 @@ export default async function ProjectApprovalPage({ params }: PageProps) {
           <h2 className="text-3xl font-display font-bold text-ink dark:text-white mb-12 text-center">Standard Approval Process</h2>
           <div className="space-y-8 relative before:absolute before:inset-0 before:ml-6 before:-translate-x-px md:before:mx-auto md:before:translate-x-0 before:h-full before:w-0.5 before:bg-gradient-to-b before:from-transparent before:via-gray-200 dark:before:via-border-dark before:to-transparent">
             {[
-              { num: "01", title: "Site Survey & Initial Design", desc: "[CMS Placeholder: Step description]" },
-              { num: "02", title: "Developer/Landlord NOC", desc: "[CMS Placeholder: Step description]" },
-              { num: "03", title: "Authority Submission (DM/DCD/Etc)", desc: "[CMS Placeholder: Step description]" },
-              { num: "04", title: "Construction/Fit-out", desc: "[CMS Placeholder: Step description]" },
-              { num: "05", title: "Final Inspection & Completion Cert", desc: "[CMS Placeholder: Step description]" }
+              { num: "01", title: "Site Survey & Initial Design", desc: "CONTENT_REQUIRES_VERIFICATION" },
+              { num: "02", title: "Developer/Landlord NOC", desc: "CONTENT_REQUIRES_VERIFICATION" },
+              { num: "03", title: "Authority Submission (DM/DCD/Etc)", desc: "CONTENT_REQUIRES_VERIFICATION" },
+              { num: "04", title: "Construction/Fit-out", desc: "CONTENT_REQUIRES_VERIFICATION" },
+              { num: "05", title: "Final Inspection & Completion Cert", desc: "CONTENT_REQUIRES_VERIFICATION" }
             ].map((step, idx) => (
               <div key={idx} className="relative flex items-center justify-between md:justify-normal md:odd:flex-row-reverse group is-active">
                 <div className="flex items-center justify-center w-12 h-12 rounded-full border-4 border-white dark:border-ink-soft bg-brass shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2 shadow text-ink font-bold font-mono">
@@ -235,7 +251,7 @@ export default async function ProjectApprovalPage({ params }: PageProps) {
           <div>
             <h2 className="text-2xl font-bold text-ink dark:text-white mb-3">Common Rejection Reasons</h2>
             <p className="text-gray-700 dark:text-gray-300 leading-relaxed">
-              [CMS Placeholder: Identify common pitfalls for this specific project type. E.g. "For mezzanines, failing to provide adequate egress routes or exceeding 50% of the ground floor area without special dispensation."]
+              CONTENT_REQUIRES_VERIFICATION
             </p>
           </div>
         </div>
@@ -271,7 +287,7 @@ export default async function ProjectApprovalPage({ params }: PageProps) {
         <div className="container mx-auto max-w-4xl">
           <h2 className="text-3xl font-display font-bold text-ink dark:text-white mb-6">Visual Evidence</h2>
           <div className="h-96 bg-gray-200 dark:bg-ink rounded-xl border border-dashed border-gray-400 dark:border-gray-600 flex items-center justify-center text-gray-500">
-            [CMS Placeholder: Before/After Interactive Slider Component to be placed here once imagery is uploaded]
+            CONTENT_REQUIRES_VERIFICATION
           </div>
         </div>
       </section>

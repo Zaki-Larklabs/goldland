@@ -10,21 +10,26 @@ import { GlobalCta } from "@/components/layout/GlobalCta";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { ArrowRight, Calendar, Search } from "lucide-react";
 
-export const dynamic = "force-dynamic";
+export const revalidate = 3600;
 
-export const metadata: Metadata = {
-  title: "Engineering & Approval Guides | Goldland Contracting",
-  description: "Technical knowledge base and approval guides for Dubai authorities including DDA, DM, DCD, and Trakhees.",
-  alternates: {
-    canonical: "https://goldlandcontracting.ae/guides",
-  },
-};
+import { generateSeoMetadata } from "@/lib/seo/getSeo";
+
+export async function generateMetadata(): Promise<Metadata> {
+  return generateSeoMetadata("/guides", {
+    title: "Engineering & Approval Guides | Goldland Contracting",
+    description: "Technical knowledge base and approval guides for Dubai authorities including DDA, DM, DCD, and Trakhees.",
+  });
+}
 
 export default async function GuidesIndexPage() {
-  // Fetch published guides
-  const allGuides = await db.select()
-    .from(guides)
-    .orderBy(desc(guides.id));
+  // Fetch published guides (same table as blogs) — crash-safe
+  let allGuides: any[] = [];
+  try {
+    allGuides = await db.select().from(guides).where(eq(guides.status, "published")).orderBy(desc(guides.updatedAt));
+    if (!allGuides.length) allGuides = await db.select().from(guides).orderBy(desc(guides.id));
+  } catch {
+    allGuides = [];
+  }
 
   const clusters = [
     "DDA", "Dubai Municipality", "DCD", "Trakhees", "DEWA", 
@@ -96,7 +101,7 @@ export default async function GuidesIndexPage() {
                         </span>
                         <div className="flex items-center gap-1">
                           <Calendar className="h-3 w-3" />
-                          {new Date(guide.updatedAt).toLocaleDateString()}
+                          {guide.updatedAt ? new Date(guide.updatedAt).toLocaleDateString() : guide.publishedAt ? new Date(guide.publishedAt).toLocaleDateString() : 'Draft'}
                         </div>
                       </div>
                       <CardTitle className="text-xl group-hover:text-brass transition-colors leading-tight">
@@ -107,7 +112,7 @@ export default async function GuidesIndexPage() {
                     </CardHeader>
                     <CardContent className="mt-auto">
                       <p className="text-sm text-gray-600 dark:text-gray-400 line-clamp-3 mb-4">
-                        {guide.content.substring(0, 150)}...
+                        {guide.excerpt || (guide.content || "").substring(0, 150)}...
                       </p>
                       <div className="text-brass text-sm font-medium flex items-center">
                         Read Guide <ArrowRight className="ml-1 h-4 w-4 transition-transform group-hover:translate-x-1" />
@@ -117,7 +122,7 @@ export default async function GuidesIndexPage() {
                 ))
               ) : (
                 <div className="col-span-full p-12 text-center text-gray-500 border border-dashed rounded-xl">
-                  [CMS Placeholder: No guides published yet.]
+                  CONTENT_REQUIRES_VERIFICATION
                 </div>
               )}
             </div>

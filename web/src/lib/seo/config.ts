@@ -8,11 +8,12 @@ export const siteConfig = {
   ogImage: "https://goldlandcontracting.ae/og.jpg",
   twitterHandle: "@goldlanddxb",
   company: {
-    name: "Goldland Contracting LLC",
-    phone: "+971 50 123 4567",
-    email: "info@goldlandcontracting.ae",
+    name: "Goldland Contracting L.L.C.",
+    phone: "+971566321734",
+    phoneSecondary: "+97142292800",
+    email: "sales@goldlandcontracting.ae",
     address: {
-      streetAddress: "Office 104, Business Bay",
+      streetAddress: "Office 102, Abdulla Khalifa Bldg, Al Qusais Industrial Area 1, Damascus Street",
       addressLocality: "Dubai",
       addressRegion: "Dubai",
       postalCode: "00000",
@@ -28,7 +29,8 @@ export function generateMetadataCore(
   title: string, 
   description: string, 
   pathname: string, 
-  noindex = false
+  noindex = false,
+  keywords?: string[]
 ): Metadata {
   const url = `${siteConfig.url}${pathname}`;
   
@@ -38,6 +40,7 @@ export function generateMetadataCore(
       template: "%s | Goldland Contracting",
     },
     description: description,
+    keywords,
     alternates: {
       canonical: url,
     },

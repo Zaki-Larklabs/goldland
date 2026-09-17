@@ -62,9 +62,14 @@ export const guides = pgTable("guides", {
   slug: text("slug").unique().notNull(),
   title: text("title").notNull(),
   content: text("content"),
+  excerpt: text("excerpt"),
+  coverImage: text("cover_image"),
   authorId: text("author_id").references(() => teamMembers.id),
   status: text("status").default('draft'),
   publishedAt: timestamp("published_at"),
+  updatedAt: timestamp("updated_at").defaultNow(),
+  tags: jsonb("tags"),
+  category: text("category"),
 });
 
 export const faqs = pgTable("faqs", {
@@ -124,11 +129,22 @@ export const redirects = pgTable("redirects", {
 
 export const seoRecords = pgTable("seo_records", {
   id: text("id").primaryKey(),
+  route: text("route").unique().notNull(),
   entityType: text("entity_type"),
   entityId: text("entity_id"),
   title: text("title"),
   description: text("description"),
+  keywords: text("keywords"),
+  h1: text("h1"),
+  h2: text("h2"),
+  ogImage: text("og_image"),
   canonical: text("canonical"),
+  robots: text("robots"),
+  noindex: boolean("noindex").default(false),
+  jsonLd: jsonb("json_ld"),
+  hreflang: jsonb("hreflang"),
+  updatedAt: timestamp("updated_at").defaultNow(),
+  updatedBy: text("updated_by"),
 });
 
 export const knowledgeBase = pgTable("knowledge_base", {
