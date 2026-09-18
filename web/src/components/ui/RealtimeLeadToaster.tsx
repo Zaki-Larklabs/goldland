@@ -20,7 +20,13 @@ export function RealtimeLeadToaster() {
           setTimeout(() => setLead(null), 8000);
         }
       )
-      .subscribe();
+      .subscribe((status) => {
+        // Don't retry-spam when realtime is blocked (adblocker) or RLS denies
+        // the anon key: drop the channel instead of reconnecting forever.
+        if (status === 'CHANNEL_ERROR' || status === 'TIMED_OUT' || status === 'CLOSED') {
+          supabase.removeChannel(channel);
+        }
+      });
 
     return () => {
       supabase.removeChannel(channel);

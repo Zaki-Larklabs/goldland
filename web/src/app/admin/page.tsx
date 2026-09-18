@@ -13,6 +13,7 @@ import { SeoPortalForm } from "@/components/admin/SeoPortalForm";
 import { getSiteRoutes, getFlatSiteRoutes } from "@/lib/seo/routes";
 import { logout } from "../login/actions";
 import { AutoLogout } from "@/components/admin/AutoLogout";
+import { RealtimeLeadToaster } from "@/components/ui/RealtimeLeadToaster";
 import { 
   Search, Bell, ChevronDown, LayoutDashboard, 
   Download, FileText, Building2, Wrench, Star, 
@@ -82,9 +83,14 @@ export default async function AdminDashboard({ searchParams }: { searchParams: P
   const { tab = 'leads', edit, q = '', editId } = await searchParams; // Defaulting to leads as per design
   const editingSeo = edit ? (await (async () => { try { const { eq } = await import("drizzle-orm"); const rows = await db.select().from(seoRecords).where(eq(seoRecords.route, edit)).limit(1); return rows[0] ?? null; } catch { return null; } })()) as any : null;
   
-  const allAuthorities = await db.select().from(authorities);
-  const allProjects = await db.select().from(projects);
-  const allLeads = await db.select().from(leads).orderBy(desc(leads.createdAt));
+  // Resilient reads — a single missing column/table must never 500 the whole console.
+  async function safeQuery<T>(fn: () => Promise<T>, fallback: T): Promise<T> {
+    try { return await fn(); } catch (e) { console.error("[admin] DB query failed:", e); return fallback; }
+  }
+
+  const allAuthorities = await safeQuery(() => db.select().from(authorities), [] as typeof authorities.$inferSelect[]);
+  const allProjects = await safeQuery(() => db.select().from(projects), [] as typeof projects.$inferSelect[]);
+  const allLeads = await safeQuery(() => db.select().from(leads).orderBy(desc(leads.createdAt)), [] as typeof leads.$inferSelect[]);
   let allServices: any[] = []; try { allServices = await db.select().from(services); } catch {}
   let allReviews: any[] = []; try { allReviews = await db.select().from(reviews).orderBy(desc(reviews.createdAt)); } catch {}
   let allGuides: any[] = []; try { allGuides = await db.select().from(guides).orderBy(desc(guides.updatedAt)); } catch {}
@@ -114,6 +120,7 @@ export default async function AdminDashboard({ searchParams }: { searchParams: P
   return (
     <div className="flex h-screen bg-[#0A101C] text-gray-200 font-sans overflow-hidden selection:bg-[#C9A544]/30 selection:text-white">
       <AutoLogout />
+      <RealtimeLeadToaster />
 
       {/* FIXED LEFT SIDEBAR (desktop) */}
       <aside className="w-[260px] h-full hidden lg:flex flex-col border-r border-white/[0.06] bg-[#050B14]/95 relative z-20 shrink-0">

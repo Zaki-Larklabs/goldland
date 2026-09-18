@@ -32,5 +32,10 @@ export const updateSession = async (request: NextRequest) => {
     },
   );
 
+  // IMPORTANT: calling getUser() refreshes an expired session and writes the
+  // new tokens to supabaseResponse cookies. Without this, logins silently
+  // expire and /admin bounces back to /login.
+  await supabase.auth.getUser();
+
   return supabaseResponse;
 };

@@ -8,7 +8,6 @@ import { Chatbot } from "@/components/chatbot/Chatbot";
 import { ThemeProvider } from "@/components/theme-provider";
 import { SplashScreen } from "@/components/layout/SplashScreen";
 import { StickyMobileBar } from "@/components/layout/StickyMobileBar";
-import { RealtimeLeadToaster } from "@/components/ui/RealtimeLeadToaster";
 
 const localBusinessSchema = {
   "@context": "https://schema.org",
@@ -144,7 +143,6 @@ export default function RootLayout({
           </main>
           <StickyMobileBar />
           <Chatbot />
-          <RealtimeLeadToaster />
           <Footer />
         </ThemeProvider>
       </body>
