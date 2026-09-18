@@ -25,7 +25,7 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="min-h-screen bg-[#050B14] flex flex-col md:flex-row text-white font-sans selection:bg-[#C9A544] selection:text-black">
+    <div className="min-h-dvh bg-[#050B14] flex flex-col md:flex-row text-white font-sans selection:bg-[#C9A544] selection:text-black">
       
       {/* LEFT SIDE - Hero Background (60%) */}
       <div className="hidden md:flex flex-col w-[60%] relative p-12 overflow-hidden justify-between border-r border-white/5">

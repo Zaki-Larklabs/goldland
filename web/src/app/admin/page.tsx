@@ -118,7 +118,7 @@ export default async function AdminDashboard({ searchParams }: { searchParams: P
   const meta = TAB_META[tab] ?? TAB_META.authorities;
 
   return (
-    <div className="flex h-screen bg-[#0A101C] text-gray-200 font-sans overflow-hidden selection:bg-[#C9A544]/30 selection:text-white">
+    <div className="flex h-dvh bg-[#0A101C] text-gray-200 font-sans overflow-hidden selection:bg-[#C9A544]/30 selection:text-white">
       <AutoLogout />
       <RealtimeLeadToaster />
 

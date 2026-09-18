@@ -1,12 +1,17 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
+import { usePathname } from "next/navigation";
 
 export function SplashScreen() {
   const [show, setShow] = useState(true);
   const [fade, setFade] = useState(false);
+  const pathname = usePathname();
+  // Skip the splash on admin/login so it never blocks or scroll-locks those screens
+  const skip = pathname?.startsWith("/admin") || pathname?.startsWith("/login");
 
   useEffect(() => {
+    if (skip) return;
     // Lock body scroll while splash is showing
     document.body.style.overflow = 'hidden';
     
@@ -24,9 +29,9 @@ export function SplashScreen() {
       clearTimeout(t2);
       document.body.style.overflow = 'auto';
     };
-  }, []);
+  }, [skip]);
 
-  if (!show) return null;
+  if (skip || !show) return null;
 
   return (
     <div className={`fixed inset-0 z-[99999] bg-ink flex flex-col items-center justify-center transition-opacity duration-700 ease-in-out ${fade ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}>

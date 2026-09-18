@@ -2,12 +2,14 @@
 
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { MessageCircle, Phone, ClipboardCheck } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { trackEvent } from "@/lib/analytics";
 
 export function StickyMobileBar() {
   const [visible, setVisible] = useState(false);
+  const pathname = usePathname();
 
   useEffect(() => {
     // Show after scrolling down slightly
@@ -31,6 +33,9 @@ export function StickyMobileBar() {
 
   const waLink = "https://wa.me/971566321734?text=Hi,%20I%20am%20looking%20for%20assistance%20with%20Dubai%20approvals.";
   const phoneLink = "tel:+971566321734";
+
+  // Never cover the admin console or login screen (esp. on phones)
+  if (pathname?.startsWith("/admin") || pathname?.startsWith("/login")) return null;
 
   return (
     <div

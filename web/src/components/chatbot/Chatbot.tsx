@@ -315,6 +315,9 @@ export function Chatbot() {
     sendMessage(t);
   };
 
+  // Keep the admin console and login screen free of floating widgets (esp. on phones)
+  if (pathname?.startsWith("/admin") || pathname?.startsWith("/login")) return null;
+
   return (
     <>
       {/* ── INDEPENDENTLY DRAGGABLE: CHAT FAB (gold) ── */}

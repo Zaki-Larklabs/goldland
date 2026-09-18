@@ -80,6 +80,7 @@ export function MobileMenu() {
               { label: "Projects", href: "/projects" },
               { label: "Blog", href: "/blog" },
               { label: "Contact", href: "/contact" },
+              { label: "Admin Login", href: "/login" },
             ].map((link) => (
               <Link 
                 key={link.label}
